@@ -11,8 +11,8 @@ const winston = require('winston');
 
 const app = express();
 
-const DEV = true;
-const PORT = 8000;
+const DEV = process.env.DEV;
+const PORT = process.env.PORT;
 
 const ROOT_DIR_PATH = path.resolve(__dirname, '..');
 const CLIENT_ROOT_DIR_PATH = path.resolve(ROOT_DIR_PATH, 'client');
