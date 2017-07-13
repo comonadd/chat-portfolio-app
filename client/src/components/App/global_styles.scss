@@ -1,0 +1,124 @@
+/**
+ * The global styles.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+@import "vars";
+
+/* The outer HTML elements */
+html,
+body {
+  height: 100%;
+}
+
+/* The body element */
+body {
+  margin: 0;
+  background-color: $body___background-color;
+  font: $body___font;
+  color: $body___color;
+}
+
+/* The heading */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $heading___font-family;
+  font-weight: $heading___font-weight;
+  color: $heading___color;
+}
+
+/* The paragraph */
+p {
+  line-height: $paragraph___line-height;
+  margin: $paragraph___margin;
+}
+
+/* Link */
+a {
+  color: $link___color;
+  text-decoration: $link___text-decoration;
+
+  &:hover {
+    color: $link_hover___color;
+  }
+
+  &:focus {
+    color: $link_focus___color;
+  }
+}
+
+/* The input elemnent */
+input {
+  $border___clr: #eee;
+  $clr: $body___color;
+
+  border: 1px solid $border___clr;
+  color: $clr;
+  padding: 8px 6px;
+  font-size: 14px;
+
+  &:hover {
+    border: 1px solid darken($border___clr, 5%);
+    color: lighten($body___color, 5%);
+  }
+
+  &:focus {
+    border: 1px solid darken($border___clr, 10%);
+    color: lighten($body___color, 10%);
+  }
+
+  &:active {
+    border: 1px solid darken($border___clr, 15%);
+    color: lighten($body___color, 15%);
+  }
+}
+
+/* The button element */
+button {
+  $bg: $colors__tan;
+  $clr: #fff;
+
+  background: $bg;
+  color: $clr;
+  border: none;
+  padding: 16px 0;
+
+  &:hover {
+    background: darken($bg, 5%);
+    color: darken($clr, 5%);
+    cursor: pointer;
+  }
+
+  &:focus {
+    background: darken($bg, 10%);
+    color: darken($clr, 10%);
+    cursor: pointer;
+  }
+
+  &:active {
+    background: darken($bg, 15%);
+    color: darken($clr, 15%);
+  }
+}
+
+/* The form element */
+form {
+  display: flex;
+  flex-direction: column;
+
+  input {
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  button:last-child {
+    margin-top: 32px;
+  }
+}

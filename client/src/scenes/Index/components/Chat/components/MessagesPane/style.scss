@@ -1,0 +1,35 @@
+/**
+ * The style brief description.
+ *
+ * The style long description.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+/* The messages pane */
+.messages-pane {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+
+  /* The title */
+  &__title {
+    width: 100%;
+    flex-basis: 80px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-bottom: 1px solid #eee;
+  }
+
+  /* The messages list */
+  &__msgs-list {
+    flex-grow: 1;
+    flex-shrink: 1;
+    flex-basis: 100%;
+  }
+}

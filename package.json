@@ -1,0 +1,32 @@
+{
+  "name": "chat_portfolio_app",
+  "version": "1.0.0",
+  "description": "The chat application for my portfolio",
+  "main": "server/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wrongway4you/chat_portfolio_app.git"
+  },
+  "keywords": [
+    "chat",
+    "portfolio",
+    "application",
+    "app",
+    "react",
+    "redux",
+    "express"
+  ],
+  "author": "Dmitry Guzeev <dmitry.guzeev@yahoo.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wrongway4you/chat_portfolio_app/issues"
+  },
+  "homepage": "https://github.com/wrongway4you/chat_portfolio_app#readme",
+  "dependencies": {
+    "express": "^4.15.3",
+    "winston": "^2.3.1"
+  }
+}

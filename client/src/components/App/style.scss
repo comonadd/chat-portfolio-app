@@ -1,0 +1,31 @@
+/**
+ * The application main style file.
+ *
+ * This file defines the styles for application.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+@import "vars";
+@import "global_styles";
+@import "webkit_scrollbar";
+@import "~include-media/dist/_include-media.scss";
+
+.app {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+
+  @include media("<=tablet") {
+    flex-direction: column;
+  }
+
+  &__main {
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: flex;
+  }
+}

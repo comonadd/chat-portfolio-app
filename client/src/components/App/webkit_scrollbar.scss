@@ -1,0 +1,39 @@
+/**
+ * The styles for the WebKit scrollbar.
+ *
+ * This file defines the style for the WebKit scrollbar.
+ * You can read about styling the WebKit scrollbar
+ * [here](https://css-tricks.com/custom-scrollbars-in-webkit/).
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+:global ::-webkit-scrollbar {
+  // nothing there
+}
+
+:global ::-webkit-scrollbar-button {
+  // nothing there
+}
+
+:global ::-webkit-scrollbar-track {
+  // nothing there
+}
+
+:global ::-webkit-scrollbar-track-piece {
+  // nothing there
+}
+
+:global ::-webkit-scrollbar-thumb {
+  // nothing there
+}
+
+:global ::-webkit-scrollbar-corner {
+  // nothing there
+}
+
+:global ::-webkit-resizer {
+  // nothing there
+}

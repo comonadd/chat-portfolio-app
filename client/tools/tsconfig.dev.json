@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "baseUrl": "../src",
+    "outDir": "../build/dev",
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "module": "es6",
+    "target": "es6",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "jsx": "preserve",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "paths": {
+      "util": ["util"],
+      "constants": ["util/constants"]
+    }
+  },
+  "include": [
+    "../src/index.tsx"
+  ],
+  "exclude": [
+    "../node_modules"
+  ]
+}
