@@ -10,9 +10,6 @@ const config = require('../config');
 module.exports = (buildModeConfig) => {
   const stylesUseOption = [
     {
-      loader: 'style-loader',
-    },
-    {
       loader: 'css-loader',
       options: {
         importLoaders: 0,
@@ -38,8 +35,13 @@ module.exports = (buildModeConfig) => {
     test: /\.scss$/,
     // include: [config.srcDirPath],*/
     use: buildModeConfig.optimize ? ExtractTextWebpackPlugin.extract({
-      stylesUseOption,
+      use: stylesUseOption,
       fallback: 'style-loader',
-    }) : stylesUseOption,
+    }) : [
+      {
+        loader: 'style-loader',
+      },
+      ...stylesUseOption,
+    ],
   };
 };
