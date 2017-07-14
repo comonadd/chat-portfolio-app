@@ -11,7 +11,7 @@ const winston = require('winston');
 
 const app = express();
 
-const DEV = process.env.DEV;
+const DEV = process.env.DEV == '1';
 const PORT = process.env.PORT;
 
 const ROOT_DIR_PATH = path.resolve(__dirname, '..');
@@ -25,6 +25,7 @@ const INDEX_PAGE = fs.readFileSync(INDEX_PAGE_FILE_PATH).toString();
 
 // Set the GET request handler on the '/' path
 app.get('/', (req, res) => {
+  console.log(INDEX_PAGE);
   res.send(INDEX_PAGE);
 });
 
