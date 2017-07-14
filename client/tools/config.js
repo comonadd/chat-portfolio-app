@@ -135,4 +135,4 @@ c.buildMode = {
 };
 
 // Initial page title
-c.initialPageTitle = 'The Modern Frontend Starter Kit';
+c.initialPageTitle = 'The wrongway4you\'s Portfolio Chat Application';
