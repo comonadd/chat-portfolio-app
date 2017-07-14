@@ -25,7 +25,6 @@ const INDEX_PAGE = fs.readFileSync(INDEX_PAGE_FILE_PATH).toString();
 
 // Set the GET request handler on the '/' path
 app.get('/', (req, res) => {
-  console.log(INDEX_PAGE);
   res.send(INDEX_PAGE);
 });
 

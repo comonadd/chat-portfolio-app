@@ -1,0 +1,1 @@
+web: cd client && yarn install && yarn run build:release && cd - && node server/index.js
