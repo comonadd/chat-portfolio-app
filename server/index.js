@@ -23,12 +23,7 @@ const INDEX_PAGE_FILE_PATH = path.resolve(CLIENT_BUILD_DIR_PATH, 'index.html');
 
 const INDEX_PAGE = fs.readFileSync(INDEX_PAGE_FILE_PATH).toString();
 
-/**
- * @summary
- * The index handler.
- *
- * @return {string}.
- */
+// Set the GET request handler on the '/' path
 app.get('/', (req, res) => {
   res.send(INDEX_PAGE);
 });
