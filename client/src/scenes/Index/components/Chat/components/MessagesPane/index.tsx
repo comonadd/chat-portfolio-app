@@ -12,7 +12,8 @@ const style = require('./style');
 export { MessageProps } from './components/Message';
 
 export type MessagesPaneProps = {
-  messages: MessageProps[],
+  items: {},
+  users: {},
   loading: boolean,
 };
 
@@ -35,8 +36,13 @@ export default class MessagesPane extends React.Component<MessagesPaneProps, Mes
         <div className={style.messagesPane__msgsList}>
           {
             this.props.loading ? <Loader /> :
-            this.props.messages.map(msg =>
-              <Message key={msg.id} {...msg} />)
+            Object.keys(this.props.items).map((id: string) => {
+              const msg: any = this.props.items[id];
+              const author: any = this.props.users[msg.authorUsername];
+              return (
+                <Message key={id} author={author} {...msg} />
+              );
+            })
           }
         </div>
       </div>

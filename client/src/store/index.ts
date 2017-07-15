@@ -17,23 +17,27 @@ import {
   routerMiddleware as createRouterMiddleware,
 } from 'react-router-redux';
 
-/* import MessagesDuck from './ducks/messages';*/
-import initialState from './initial_state';
+import RootState from './root_state';
+import MessagesDuck from './ducks/messages';
+import UserDuck from './ducks/user';
+import UsersDuck from './ducks/users';
+import NotificationsDuck from './ducks/notifications';
 
-/* Construct a store reducer */
-const reducer = reduxCombineReducers({
-  // The blank reducer (delete if the amount of other reducers is >= 1)
-  blank: (state, _) => state || {},
-  /* messages: MessagesDuck,*/
+// Construct a store reducer
+const rootReducer = reduxCombineReducers<RootState>({
+  messages: MessagesDuck,
+  user: UserDuck,
+  users: UsersDuck,
+  notifications: NotificationsDuck,
 });
 
-/* Create the history for the router */
+// Create the history for the router
 export let history = createHashHistory();
 
-/* Create the router middleware */
+// Create the router middleware
 const routerMiddleware = createRouterMiddleware(history);
 
-/* Construct the store enhancer */
+// Construct the store enhancer
 let enhancer = reduxCompose(
   reduxApplyMiddleware(reduxThunk),
   reduxApplyMiddleware(routerMiddleware)
@@ -47,17 +51,17 @@ declare global {
   }
 }
 
-/* Enable the Redux devtools iff built in the debug mode*/
+// Enable the Redux devtools iff built in the debug mode
 if (__DEBUG__ && window.__REDUX_DEVTOOLS_EXTENSION__) {
   enhancer = reduxCompose(enhancer, window.__REDUX_DEVTOOLS_EXTENSION__());
 }
 
-/* Create the store */
+// Create the store
 const store = createStore(
-  reducer,
-  initialState,
+  rootReducer,
+  {} as RootState,
   enhancer,
 );
 
-/* Export the store */
+// Export the store
 export default store;

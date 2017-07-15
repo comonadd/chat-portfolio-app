@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "../build/release",
     "sourceMap": false,
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "module": "commonjs",
     "target": "es5",
     "jsx": "react"

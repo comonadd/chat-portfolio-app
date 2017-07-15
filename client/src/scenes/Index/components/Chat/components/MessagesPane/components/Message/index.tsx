@@ -10,14 +10,13 @@ const style = require('./style');
 
 interface MessageLeftProps {
   author: {
-    firstName: string;
-    lastName: string;
-    avatarUrl: string;
+    firstname: string;
+    lastname: string;
   };
 }
 
 const MessageLeft = (props: MessageLeftProps) => {
-  const doesAvatarExists = props.author.avatarUrl.length > 0;
+  const doesAvatarExists = false;
 
   const generateRandomAvatarBackgroundColor = () => {
     const a = [0, 0, 0].map(() => {
@@ -33,11 +32,11 @@ const MessageLeft = (props: MessageLeftProps) => {
   return (
     <div className={style.msg__left}>
       <div className={style.msg__left__authorAvatar}>
-        {doesAvatarExists ? <img src={props.author.avatarUrl}/> :
+        {doesAvatarExists ? <img src={''}/> :
          <div className={style.msg__left__authorAvatar__synteticImage}
               style={{background: backgroundColor, color: '#fff', }}>
            <span>
-             {`${props.author.firstName[0]} ${props.author.lastName[0]}`}
+             {`${props.author.firstname[0]} ${props.author.lastname[0]}`}
            </span>
          </div>}
       </div>
@@ -48,8 +47,8 @@ const MessageLeft = (props: MessageLeftProps) => {
 interface MessageBodyHeaderProps {
   author: {
     username: string;
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
   };
 }
 
@@ -57,7 +56,7 @@ const MessageBodyHeader = (props: MessageBodyHeaderProps) =>
   <div className={style.msg__body__header}>
     <div className={style.msg__body__header__author}>
       <div className={style.msg__body__header__author__fullname}>
-        {props.author.firstName + ' ' + props.author.lastName}
+        {props.author.firstname + ' ' + props.author.lastname}
       </div>
       <div className={style.msg__body__header__author__username}>
         (@{props.author.username})
@@ -68,9 +67,8 @@ const MessageBodyHeader = (props: MessageBodyHeaderProps) =>
 interface MessageBodyProps {
   text: string;
   author: {
-    firstName: string;
-    lastName: string;
-    avatarUrl: string;
+    firstname: string;
+    lastname: string;
     username: string;
   };
 }
@@ -86,10 +84,9 @@ const MessageBody = (props: MessageBodyProps) =>
 export interface MessageProps {
   id: string,
   author: {
-    firstName: string;
-    lastName: string;
+    firstname: string;
+    lastname: string;
     username: string;
-    avatarUrl: string;
   };
   text: string;
 }

@@ -31,3 +31,19 @@ const generate_random_firstname = () => randomChoice([
 const generate_random_lastname = () => randomChoice([
   "Archer", "Crocker", "Programmer",
 ]);
+
+/**
+ * @summary
+ * Check if the letter is within the upper case.
+ *
+ * @description
+ * This function will return `true` if the given letter is
+ * within the upper case, and `false` otherwise.
+ *
+ * @return {boolean}
+ */
+export const isUpper = (ch: string) => ch.toUpperCase() == ch;
+
+export default {
+  isUpper,
+};

@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "The chat application for my portfolio",
   "main": "server/index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wrongway4you/chat_portfolio_app.git"

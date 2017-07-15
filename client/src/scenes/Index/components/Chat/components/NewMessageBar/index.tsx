@@ -34,7 +34,10 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
     super(...args);
 
     // Bind member methods
+    this.setErrorMessage = this.setErrorMessage.bind(this);
+    this.checkText = this.checkText.bind(this);
     this.onSend = this.onSend.bind(this);
+    this.onTextChange = this.onTextChange.bind(this);
   }
 
   setErrorMessage(msg: string): void {
@@ -65,7 +68,10 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
 
     this.setState({
       ...this.state,
-      [name]: value,
+      newMsg: {
+        ...this.state.newMsg,
+        text: value,
+      },
     });
   }
 
