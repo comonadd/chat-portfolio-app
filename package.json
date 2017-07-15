@@ -4,7 +4,7 @@
   "description": "The chat application for my portfolio",
   "main": "server/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "cd client && yarn install && yarn run build:release && cd - && DEV=0 PORT=80 node server/index.js"
   },
   "repository": {
     "type": "git",
@@ -29,7 +29,5 @@
     "express": "^4.15.3",
     "winston": "^2.3.1"
   },
-  "scripts": {
-    "start": "cd client && yarn install && yarn run build:release && cd - && DEV=0 PORT=80 node server/index.js"
-  }
+  "devDependencies": {}
 }
