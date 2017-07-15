@@ -16,6 +16,7 @@ c.entryFileName = 'index.tsx';
 // Paths
 c.rootDirPath = path.resolve(__dirname, '..');
 c.srcDirPath = path.resolve(c.rootDirPath, 'src');
+c.srcUtilDirPath = path.resolve(c.srcDirPath, 'util');
 c.srcImgDirPath = path.resolve(c.srcDirPath, 'img');
 c.buildDirPath = path.resolve(c.rootDirPath, 'build');
 c.jekyllBuildDirPath = path.resolve(c.rootDirPath, 'jekyll_build');
