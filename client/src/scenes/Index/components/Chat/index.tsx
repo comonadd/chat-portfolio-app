@@ -6,37 +6,39 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect as reactReduxConnect } from 'react-redux';
+import PropTypes from 'prop-types';
 
-/* import * as messageActions from 'store/ducks/messages';*/
+import { fetchMessages, addMsg, State as MessagesState } from 'store/ducks/messages';
+import { addNotification } from 'store/ducks/notifications';
+import { State as UserState } from 'store/ducks/user';
+import { State as UsersState } from 'store/ducks/users';
+import { RootState, Dispatch } from 'store/types';
 import Loader from 'components/Loader';
 import MessagesPane, { MessageProps } from './components/MessagesPane';
 import NewMessageBar from './components/NewMessageBar';
 const style = require('./style');
 
-export type ChatState = {
-}
+type ChatState = {
+};
 
-export type ChatProps = {
-  messages: MessageProps[],
-  loading: boolean,
+interface OwnProps {}
+
+interface ChatProps extends OwnProps {
+  messages: MessagesState;
+  user: UserState;
+  users: UsersState;
+  addMsg: typeof addMsg;
+  fetchMessages: typeof fetchMessages;
+  addNotification: typeof addNotification;
 }
 
 /**
  * @summary
  * The component that represents the chat.
  */
-/* @reactReduxConnect(
- *   (state) => ({
- *     user: state.user,
- *   }),
- *   (dispatch) => ({
- *     actions: bindActionCreators(messageActions, dispatch),
- *   }),
- * )*/
-export default class Chat extends React.Component<ChatProps, any> {
+class Chat extends React.Component<ChatProps, ChatState> {
   /**
-   * @summary
-   * The initial state.
+   * @summary The initial state.
    */
   state: ChatState = {
   };
@@ -59,42 +61,45 @@ export default class Chat extends React.Component<ChatProps, any> {
    * @return {undefined}
    */
   onNewMsgSend(text: string) {
-    console.log('sending the message');
-    /* this.props.actions.addMsg({
-     *   author: this.props.user,
-     *   text,
-     * });*/
+    if (this.props.user.isAuthorized) {
+      this.props.addMsg(
+        this.props.user,
+        text,
+      );
+    } else {
+      this.props.addNotification(
+        'error',
+        'You must be authenticated in order to send messages',
+      );
+    }
+  }
+
+  componentWillMount() {
+    this.props.fetchMessages(0, 10);
   }
 
   render() {
-    // TODO: Remove this fixture
-    const msgs = [{
-      id: '1',
-      text: 'Hello, how are you?',
-      author: {
-        firstName: 'Dmitry',
-        lastName: 'Guzeev',
-        username: 'wrongway4you',
-        avatarUrl: '',
-      },
-    }, {
-      id: '2',
-      text: 'What is that really qsq?',
-      author: {
-        firstName: 'Dmitry',
-        lastName: 'Guzeev',
-        username: 'wrongway4you',
-        avatarUrl: '',
-      },
-    }];
-
     return (
       <div className={style.chat}>
         <MessagesPane
-          messages={msgs}
-          loading={false} />
+          items={this.props.messages.items}
+          users={this.props.users.items}
+          loading={this.props.messages.loading} />
         <NewMessageBar onSend={this.onNewMsgSend} />
       </div>
     );
   }
 }
+
+export default reactReduxConnect(
+  (state: RootState, ownProps: OwnProps) => ({
+    messages: state.messages,
+    user: state.user,
+    users: state.users,
+  }),
+  (dispatch: Dispatch) => bindActionCreators({
+    fetchMessages,
+    addMsg,
+    addNotification,
+  }, dispatch),
+)(Chat);

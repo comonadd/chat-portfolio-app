@@ -4,13 +4,21 @@
  */
 
 import React from 'react';
+import { connect as reactReduxConnect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 import Popup from 'components/Popup';
+import RootState from 'store/root_state';
+import { addNotification } from 'store/ducks/notifications';
 const style = require('../../../../style');
 
-export interface LoginPopupProps {
+export interface OwnProps {
   onSubmit: (username: string, password: string) => boolean;
   onRemoval: () => void;
+}
+
+interface LoginPopupProps extends OwnProps {
+  addNotification: typeof addNotification;
 }
 
 interface LoginPopupState {
@@ -18,7 +26,7 @@ interface LoginPopupState {
   password: string;
 }
 
-export default class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
+class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
   constructor(...args: any[]) {
     // Call the parent class constructor
     super(...args)
@@ -41,7 +49,6 @@ export default class LoginPopup extends React.Component<LoginPopupProps, LoginPo
       ...this.state,
       [name]: value,
     });
-    console.log(this.state);
   }
 
   render() {
@@ -60,7 +67,7 @@ export default class LoginPopup extends React.Component<LoginPopupProps, LoginPo
             onChange={this.onFormChange}/>
           <input
             name="password"
-            type="text"
+            type="password"
             placeholder="Password"
             value={this.state.password}
             onChange={this.onFormChange}/>
@@ -74,3 +81,12 @@ export default class LoginPopup extends React.Component<LoginPopupProps, LoginPo
     );
   }
 }
+
+const mapStateToProps = (state: RootState, ownProps: OwnProps) => ({
+});
+
+const mapDispatchToProps = (dispatch: any) => bindActionCreators({
+  addNotification,
+}, dispatch);
+
+export default reactReduxConnect(mapStateToProps, mapDispatchToProps)(LoginPopup);

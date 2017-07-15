@@ -21,5 +21,5 @@ ReactDOM.render(
   <AppWrapper store={store} history={storeHistory}>
     <App />
   </AppWrapper>,
-  appContainerElement
+  appContainerElement,
 );

@@ -5,14 +5,24 @@
 
 import React from 'react';
 import classnames from 'classnames';
+import {
+  bindActionCreators,
+} from 'redux';
+import {
+  connect as reactReduxConnect
+} from 'react-redux';
 
+import { Dispatch, RootState } from 'store/types';
 import LoginPopup from './components/LoginPopup';
 import RegisterPopup from './components/RegisterPopup';
+import { State as UserState, login, register, logout } from 'store/ducks/user';
 const style = require('components/Sidebar/style');
 
 export interface AuthorizationBlockProps {
-  isAuthorized: boolean;
-  avatarUrl: string;
+  user: UserState,
+  login: typeof login,
+  register: typeof register,
+  logout: typeof logout,
 }
 
 interface AuthorizationBlockState {
@@ -20,7 +30,7 @@ interface AuthorizationBlockState {
   registerPopupShowing: boolean;
 }
 
-export default class AuthorizationBlock extends React.Component<AuthorizationBlockProps, AuthorizationBlockState> {
+class AuthorizationBlock extends React.Component<AuthorizationBlockProps, AuthorizationBlockState> {
   constructor(...args: any[]) {
     // Call the parent class constructor
     super(...args);
@@ -37,6 +47,7 @@ export default class AuthorizationBlock extends React.Component<AuthorizationBlo
     this.showRegisterPopup = this.showRegisterPopup.bind(this);
     this.hideRegisterPopup = this.hideRegisterPopup.bind(this);
     this.onLoginPopupFormSubmit = this.onLoginPopupFormSubmit.bind(this);
+    this.onRegisterPopupFormSubmit = this.onRegisterPopupFormSubmit.bind(this);
   }
 
   showLoginPopup() {
@@ -67,25 +78,28 @@ export default class AuthorizationBlock extends React.Component<AuthorizationBlo
     });
   }
 
-  onLoginPopupFormSubmit(username: string, password: string): boolean {
-    this.setState({
-      ...this.state,
-      loginPopupShowing: false,
-    });
-    console.log(`login: {${username}, ${password}}`);
-    return true;
-  }
+  onLoginPopupFormSubmit(
+    username: string,
+    password: string): boolean {
+      this.setState({
+        ...this.state,
+        loginPopupShowing: false,
+      });
+      this.props.login(username, password);
+      return true;
+    }
 
   onRegisterPopupFormSubmit(
     username: string,
     password: string,
+    email: string,
     firstname: string,
     lastname: string): boolean {
       this.setState({
         ...this.state,
         registerPopupShowing: false,
       });
-      console.log(`register: {${username}, ${password}, ${firstname}, ${lastname}}`);
+      this.props.register(username, password, email, firstname, lastname);
       return true;
     }
 
@@ -93,7 +107,29 @@ export default class AuthorizationBlock extends React.Component<AuthorizationBlo
     return (
       <div className={style.sidebar__mobileMenu__authorizationBlock}>
         {
-          this.props.isAuthorized ?
+          this.props.user.isAuthorized ?
+          <div className={style.sidebar__mobileMenu__authorizationBlock__authorizedBlock}>
+            <div
+              className={
+                classnames([
+                  style.sidebar__btn,
+                  style.sidebar__mobileMenu__authorizationBlock__profileBtn,
+                  "fa",
+                  "fa-user",
+                ])}>
+            </div>
+            <div
+              className={
+                classnames([
+                  style.sidebar__btn,
+                  style.sidebar__mobileMenu__authorizationBlock__logoutBtn,
+                  "fa",
+                  "fa-sign-out",
+                ])}
+              onClick={this.props.logout}>
+            </div>
+          </div>
+          :
           <div className={style.sidebar__mobileMenu__authorizationBlock__nonAuthorizedBlock}>
             <div
               className={style.sidebar__btn}
@@ -114,15 +150,6 @@ export default class AuthorizationBlock extends React.Component<AuthorizationBlo
               </div>
             </div>
           </div>
-          :
-          <div className={style.sidebar__mobileMenu__authorizationBlock__authorizedBlock}>
-            <div
-              className={
-                classnames([
-                  style.sidebar__btn,
-                  style.sidebar__mobileMenu__authorizationBlock__profileBtn])}>
-            </div>
-          </div>
         }
         {
           this.state.loginPopupShowing ?
@@ -138,3 +165,14 @@ export default class AuthorizationBlock extends React.Component<AuthorizationBlo
     );
   }
 }
+
+export default reactReduxConnect(
+  (state: RootState, ownProps: {}) => ({
+    user: state.user,
+  }),
+  (dispatch: Dispatch) => bindActionCreators({
+    login,
+    register,
+    logout,
+  }, dispatch),
+)(AuthorizationBlock);

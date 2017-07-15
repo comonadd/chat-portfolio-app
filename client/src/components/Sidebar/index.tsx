@@ -54,7 +54,7 @@ export default class Sidebar extends React.Component<any, SidebarState> {
         <SidebarLogotype />
         <div className={mobileMenuContainerStyles}>
           <SidebarNavigation />
-          <SidebarAuthorizationBlock isAuthorized={true} avatarUrl="" />
+          <SidebarAuthorizationBlock />
         </div>
         <div
           className={classnames([style.sidebar__btn, style.sidebar__mobileMenuBtn])}

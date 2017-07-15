@@ -17,5 +17,5 @@ const style = require('./style');
  */
 export default () =>
   <div className={style.indexScene}>
-    <Chat messages={[]} loading={false} />
+    <Chat />
   </div>;
