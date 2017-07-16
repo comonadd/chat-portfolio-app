@@ -92,6 +92,7 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
           type="text"
           value={this.state.newMsg.text}
           onChange={this.onTextChange}
+          onKeyPress={(e: any) => (e.key == 'Enter') ? this.onSend(undefined) : undefined}
         />
       </div>
     );
