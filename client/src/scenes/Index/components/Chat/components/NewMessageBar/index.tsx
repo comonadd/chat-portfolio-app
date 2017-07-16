@@ -38,6 +38,7 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
     this.checkText = this.checkText.bind(this);
     this.onSend = this.onSend.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
+    this.resetNewMsg = this.resetNewMsg.bind(this);
   }
 
   setErrorMessage(msg: string): void {
@@ -56,9 +57,19 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
     return true;
   }
 
+  resetNewMsg() {
+    this.setState({
+      ...this.state,
+      newMsg: {
+        text: '',
+      },
+    });
+  };
+
   onSend(event: React.MouseEvent<HTMLButtonElement>): void {
     if (this.checkText()) {
       this.props.onSend(this.state.newMsg.text);
+      this.resetNewMsg();
     }
   }
 
@@ -92,9 +103,8 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
           type="text"
           value={this.state.newMsg.text}
           onChange={this.onTextChange}
+          onKeyPress={(e: any) => (e.key == 'Enter') ? this.onSend(undefined) : undefined}
         />
-        {/* {isThereAnError &&
-            <SomeNotifictionThatWouldSayhAboutTheERror />} */}
       </div>
     );
   }

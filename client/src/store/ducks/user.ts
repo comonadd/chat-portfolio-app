@@ -6,33 +6,11 @@
 import { fb, fbDbRef } from 'store/firebase';
 import { IAction, ActionType } from 'store/action';
 import { addNotification } from './notifications';
+import { fetchUser } from './users';
 import store from 'store';
 
 const fbUsersDbRef = fbDbRef.child('users');
 const fbUsersItemsDbRef = fbUsersDbRef.child('items');
-
-fb.auth().onAuthStateChanged((user: {
-  email: string;
-  password: string;
-  uid: string;
-}) => {
-  if (user) {
-    // Login
-    store.dispatch({
-      type: ActionType.LOGIN,
-      payload: {
-        id: user.uid,
-        username: user.email,
-        password: user.password,
-      }
-    });
-  } else {
-    // Logout
-    store.dispatch({
-      type: ActionType.LOGOUT,
-    });
-  }
-});
 
 export type State = {
   id: string;
@@ -64,6 +42,7 @@ export const register = (
     const newUser = {
       id: user.uid,
       username,
+      email,
       firstname,
       lastname,
     };
@@ -114,6 +93,7 @@ export const login = (username: string, password: string) => (dispatch: any) => 
           type: ActionType.LOGIN,
           payload: user,
         });
+        dispatch(fetchUser(username));
         dispatch(addNotification(
           'success',
           'Successfull log-in',

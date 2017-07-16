@@ -34,6 +34,8 @@ export const fetchUsers = (usernames: string[]) => (dispatch: any) =>
     let promise: any = new Promise((resolve) =>
       resolve(dispatch(fetchUser(usernames[0]))));
 
+    if (usernames.length == 1) promise = promise.then(rootResolve);
+
     for (let i = 1; i < usernames.length; i++) {
       promise = (i == (usernames.length - 1)) ?
                 promise.then(() => dispatch(fetchUser(usernames[i]))).then(rootResolve) :

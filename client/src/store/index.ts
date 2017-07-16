@@ -16,6 +16,8 @@ import {
   routerReducer,
   routerMiddleware as createRouterMiddleware,
 } from 'react-router-redux';
+import persistState, {mergePersistedState} from 'redux-localstorage';
+import localStorageAdapter from 'redux-localstorage/lib/adapters/localStorage';
 
 import RootState from './root_state';
 import MessagesDuck from './ducks/messages';
@@ -24,12 +26,16 @@ import UsersDuck from './ducks/users';
 import NotificationsDuck from './ducks/notifications';
 
 // Construct a store reducer
-const rootReducer = reduxCombineReducers<RootState>({
-  messages: MessagesDuck,
-  user: UserDuck,
-  users: UsersDuck,
-  notifications: NotificationsDuck,
-});
+const rootReducer = reduxCompose(
+  mergePersistedState()
+)(
+  reduxCombineReducers<RootState>({
+    messages: MessagesDuck,
+    user: UserDuck,
+    users: UsersDuck,
+    notifications: NotificationsDuck,
+  })
+);
 
 // Create the history for the router
 export let history = createHashHistory();
@@ -37,10 +43,14 @@ export let history = createHashHistory();
 // Create the router middleware
 const routerMiddleware = createRouterMiddleware(history);
 
+const storage = reduxCompose(
+)(localStorageAdapter(window.localStorage));
+
 // Construct the store enhancer
 let enhancer = reduxCompose(
   reduxApplyMiddleware(reduxThunk),
-  reduxApplyMiddleware(routerMiddleware)
+  reduxApplyMiddleware(routerMiddleware),
+  persistState(storage, 'user'),
 );
 
 declare var __DEBUG__: boolean;
