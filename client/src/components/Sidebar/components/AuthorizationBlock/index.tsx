@@ -11,82 +11,99 @@ import {
 import {
   connect as reactReduxConnect
 } from 'react-redux';
+import {
+  firebaseConnect,
+  isLoaded,
+  isEmpty,
+  dataToJS,
+  pathToJS,
+} from 'react-redux-firebase'
 
 import SidebarButton from 'components/Sidebar/components/Button';
 import { Dispatch, RootState } from 'store/types';
 import LoginPopup from './components/LoginPopup';
 import RegisterPopup from './components/RegisterPopup';
-import { State as UserState, login, register, logout } from 'store/ducks/user';
+import ProfilePopup from './components/ProfilePopup';
 const style = require('components/Sidebar/style');
 
-export interface AuthorizationBlockProps {
-  user: UserState,
-  login: typeof login,
-  register: typeof register,
-  logout: typeof logout,
+export interface OwnProps {
+  showPopup: any;
 }
 
-interface AuthorizationBlockState {
-  loginPopupShowing: boolean;
-  registerPopupShowing: boolean;
+interface ConnectProps {
+  firebase: any;
+  auth: any;
+  authError: any;
+  profile: any;
 }
 
-class AuthorizationBlock extends React.Component<AuthorizationBlockProps, AuthorizationBlockState> {
+interface State {
+  popups: {
+    login: boolean,
+    register: boolean,
+    profile: boolean,
+  };
+}
+
+class AuthorizationBlock extends React.Component<OwnProps & ConnectProps, State> {
+  /**
+   * @summary The initial state.
+   */
+  state: State = {
+    popups: {
+      register: false,
+      login: false,
+      profile: false,
+    },
+  };
+
   constructor(...args: any[]) {
     // Call the parent class constructor
     super(...args);
 
-    // Initialize the state
-    this.state = {
-      loginPopupShowing: false,
-      registerPopupShowing: false,
-    };
-
     // Bind member methods
-    this.showLoginPopup = this.showLoginPopup.bind(this);
-    this.hideLoginPopup = this.hideLoginPopup.bind(this);
-    this.showRegisterPopup = this.showRegisterPopup.bind(this);
-    this.hideRegisterPopup = this.hideRegisterPopup.bind(this);
+    this.showPopup = this.showPopup.bind(this);
+    this.hidePopup = this.hidePopup.bind(this);
     this.onLoginPopupFormSubmit = this.onLoginPopupFormSubmit.bind(this);
     this.onRegisterPopupFormSubmit = this.onRegisterPopupFormSubmit.bind(this);
+    this.onLogout = this.onLogout.bind(this);
   }
 
-  showLoginPopup() {
+  /**
+   * @summary
+   * Show the popup by name.
+   *
+   * @return {undefined}
+   */
+  showPopup(name: string) {
     this.setState({
       ...this.state,
-      loginPopupShowing: true,
+      popups: {
+        ...this.state.popups,
+        [name]: true,
+      },
     });
   }
 
-  hideLoginPopup() {
+  hidePopup(name: string) {
     this.setState({
       ...this.state,
-      loginPopupShowing: false,
-    });
-  }
-
-  showRegisterPopup() {
-    this.setState({
-      ...this.state,
-      registerPopupShowing: true,
-    });
-  }
-
-  hideRegisterPopup() {
-    this.setState({
-      ...this.state,
-      registerPopupShowing: false,
+      popups: {
+        ...this.state.popups,
+        [name]: false,
+      },
     });
   }
 
   onLoginPopupFormSubmit(
-    username: string,
+    email: string,
     password: string): boolean {
-      this.setState({
-        ...this.state,
-        loginPopupShowing: false,
+      this.hidePopup('login');
+      console.log(this.props);
+      this.props.firebase.login({
+        email,
+        password,
       });
-      this.props.login(username, password);
       return true;
     }
 
@@ -96,37 +113,43 @@ class AuthorizationBlock extends React.Component<AuthorizationBlockProps, Author
     email: string,
     firstname: string,
     lastname: string): boolean {
-      this.setState({
-        ...this.state,
-        registerPopupShowing: false,
-      });
-      this.props.register(username, password, email, firstname, lastname);
+      this.hidePopup('register');
+      this.props.firebase.createUser(
+        {email, password},
+        {username, email, firstname, lastname},
+      );
       return true;
     }
 
+  onLogout() {
+    this.props.firebase.logout();
+  }
+
   render() {
+    const isAuthorized = this.props.auth && !this.props.auth.isAnonymous;
+
     return (
       <div className={style.sidebar__mobileMenu__authorizationBlock}>
         {
-          this.props.user.isAuthorized ?
+          isAuthorized ?
           <div className={style.sidebar__mobileMenu__authorizationBlock__authorizedBlock}>
             <SidebarButton
               title="Profile"
               name="Profile"
               iconClass="fa fa-user"
-              onClick={() => console.log(this.props.user)} />
+              onClick={() => this.showPopup('profile')} />
             <SidebarButton
               title="Logout"
               name="Logout"
               iconClass="fa fa-sign-out"
-              onClick={this.props.logout} />
+              onClick={this.onLogout} />
           </div>
           :
           <div className={style.sidebar__mobileMenu__authorizationBlock__nonAuthorizedBlock}>
             <div
               className={style.sidebar__btn}
               title="Sign In"
-              onClick={this.showLoginPopup}>
+              onClick={() => this.showPopup('login')}>
               <div className={style.sidebar__btn__content}>
                 <span className={classnames([style.sidebar__btn__content__icon, "fa", "fa-sign-in"])}></span>
                 <span className={style.sidebar__btn__content__text}>Sign In</span>
@@ -135,7 +158,7 @@ class AuthorizationBlock extends React.Component<AuthorizationBlockProps, Author
             <div
               className={style.sidebar__btn}
               title="Sign Up"
-              onClick={this.showRegisterPopup}>
+              onClick={() => this.showPopup('register')}>
               <div className={style.sidebar__btn__content}>
                 <span className={classnames([style.sidebar__btn__content__icon, "fa", "fa-user-plus"])}></span>
                 <span className={style.sidebar__btn__content__text}>Sign Up</span>
@@ -144,13 +167,19 @@ class AuthorizationBlock extends React.Component<AuthorizationBlockProps, Author
           </div>
         }
         {
-          this.state.loginPopupShowing ?
-          <LoginPopup onSubmit={this.onLoginPopupFormSubmit}
-                      onRemoval={this.hideLoginPopup} />
+          this.state.popups.login ?
+          <LoginPopup
+            onSubmit={this.onLoginPopupFormSubmit}
+            onRemoval={() => this.hidePopup('login')} />
           :
-          this.state.registerPopupShowing ?
-          <RegisterPopup onSubmit={this.onRegisterPopupFormSubmit}
-                         onRemoval={this.hideRegisterPopup} />
+          this.state.popups.register ?
+          <RegisterPopup
+            onSubmit={this.onRegisterPopupFormSubmit}
+            onRemoval={() => this.hidePopup('register')} />
+          :
+          this.state.popups.profile ?
+          <ProfilePopup
+            onRemoval={() => this.hidePopup('profile')} />
           : undefined
         }
       </div>
@@ -158,13 +187,12 @@ class AuthorizationBlock extends React.Component<AuthorizationBlockProps, Author
   }
 }
 
-export default reactReduxConnect(
-  (state: RootState, ownProps: {}) => ({
-    user: state.user,
+export default firebaseConnect()(reactReduxConnect(
+  (state: RootState, ownProps: OwnProps) => ({
+    authError: pathToJS(state.firebase, 'authError'),
+    auth: pathToJS(state.firebase, 'auth'),
+    profile: pathToJS(state.firebase, 'profile'),
   }),
   (dispatch: Dispatch) => bindActionCreators({
-    login,
-    register,
-    logout,
-  }, dispatch),
-)(AuthorizationBlock);
+  }, dispatch)
+)(AuthorizationBlock));

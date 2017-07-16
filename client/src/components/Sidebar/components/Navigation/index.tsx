@@ -49,7 +49,7 @@ export default class Navigation extends React.Component<NavigationProps, Navigat
     },
   ];
 
-  static state: NavigationState = {};
+  state: NavigationState = {};
 
   render() {
     return (
