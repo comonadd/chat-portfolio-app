@@ -4,6 +4,7 @@
  */
 
 import React from 'react';
+import classnames from 'classnames';
 
 import Message, { MessageProps } from './components/Message';
 import Loader from 'components/Loader';
@@ -45,16 +46,24 @@ export default class MessagesPane extends React.Component<MessagesPaneProps, Mes
         </div>
         <div className={style.messagesPane__msgsList}>
           {
-            !this.props.isEmpty ?
             this.props.loading ? <Loader /> :
+            this.props.isEmpty ?
+            <div className={style.messagesPane__msgsList__noMsgsMsg}>
+              <span className={classnames([
+                  style.messagesPane__msgsList__noMsgsMsg__icon,
+                  "fa", "fa-comment"])}>
+              </span>
+              <span className={style.messagesPane__msgsList__noMsgsMsg__text}>
+                There is no messages yet. Start conversation first!
+              </span>
+            </div> :
             Object.keys(messages).map((id: string) => {
               const msg: any = messages[id];
               const author: any = users[msg.authorID] || UNKNOWN_USER;
               return (
                 <Message key={id} author={author} {...msg} />
               );
-            }) :
-            <span>There is no messages (yet)</span>
+            })
           }
         </div>
       </div>
