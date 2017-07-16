@@ -142,6 +142,7 @@
     flex-direction: inherit;
     flex: 1 1 100%;
     justify-content: space-between;
+    z-index: 9999;
 
     @include media("<=tablet") {
       flex-direction: row-reverse;
