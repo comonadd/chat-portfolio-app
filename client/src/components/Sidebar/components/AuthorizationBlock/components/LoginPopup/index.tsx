@@ -13,7 +13,7 @@ import { addNotification } from 'store/ducks/notifications';
 const style = require('../../../../style');
 
 export interface OwnProps {
-  onSubmit: (username: string, password: string) => boolean;
+  onSubmit: (email: string, password: string) => boolean;
   onRemoval: () => void;
 }
 
@@ -22,7 +22,7 @@ interface LoginPopupProps extends OwnProps {
 }
 
 interface LoginPopupState {
-  username: string;
+  email: string;
   password: string;
 }
 
@@ -33,7 +33,7 @@ class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
 
     // Initialize the state
     this.state = {
-      username: '',
+      email: '',
       password: '',
     };
 
@@ -60,10 +60,10 @@ class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
       >
         <form>
           <input
-            name="username"
+            name="email"
             type="text"
-            placeholder="Username"
-            value={this.state.username}
+            placeholder="Email"
+            value={this.state.email}
             onChange={this.onFormChange}/>
           <input
             name="password"
@@ -73,7 +73,7 @@ class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
             onChange={this.onFormChange}/>
           <button
             type="submit"
-            onClick={() => this.props.onSubmit(this.state.username, this.state.password)}>
+            onClick={() => this.props.onSubmit(this.state.email, this.state.password)}>
             Login
           </button>
         </form>
