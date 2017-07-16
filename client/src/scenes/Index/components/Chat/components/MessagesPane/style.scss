@@ -32,5 +32,31 @@
     flex-grow: 1;
     flex-shrink: 1;
     flex-basis: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__no-msgs-msg {
+      height: 100%;
+      width: 100%;
+      flex: 1 0 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      text-align: center;
+
+      &__icon {
+        color: #c8c8c8;
+        font-size: 40px;
+        margin-bottom: 10px;
+      }
+
+      &__text {
+        color: #b0b0b0;
+        font-size: 14px;
+      }
+    }
   }
 }
