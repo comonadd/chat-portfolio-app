@@ -86,9 +86,6 @@ class Chat extends React.Component<OwnProps & ConnectedProps, State> {
     const messages = this.props.messages || {};
     const users = this.props.users || {};
 
-    console.log('Chat::render():');
-    console.log(users);
-
     return (
       <div className={style.chat}>
         <MessagesPane
