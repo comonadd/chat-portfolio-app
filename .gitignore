@@ -54,8 +54,8 @@ typings/
 # dotenv environment variables file
 .env
 
-# The output directory
-build
+# The development output directory
+build/dev
 
 # The temporary directory
 tmp
