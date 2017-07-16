@@ -12,6 +12,7 @@ import {
   connect as reactReduxConnect
 } from 'react-redux';
 
+import SidebarButton from 'components/Sidebar/components/Button';
 import { Dispatch, RootState } from 'store/types';
 import LoginPopup from './components/LoginPopup';
 import RegisterPopup from './components/RegisterPopup';
@@ -109,25 +110,16 @@ class AuthorizationBlock extends React.Component<AuthorizationBlockProps, Author
         {
           this.props.user.isAuthorized ?
           <div className={style.sidebar__mobileMenu__authorizationBlock__authorizedBlock}>
-            <div
-              className={
-                classnames([
-                  style.sidebar__btn,
-                  style.sidebar__mobileMenu__authorizationBlock__profileBtn,
-                  "fa",
-                  "fa-user",
-                ])}>
-            </div>
-            <div
-              className={
-                classnames([
-                  style.sidebar__btn,
-                  style.sidebar__mobileMenu__authorizationBlock__logoutBtn,
-                  "fa",
-                  "fa-sign-out",
-                ])}
-              onClick={this.props.logout}>
-            </div>
+            <SidebarButton
+              title="Profile"
+              name="Profile"
+              iconClass="fa fa-user"
+              onClick={() => console.log(this.props.user)} />
+            <SidebarButton
+              title="Logout"
+              name="Logout"
+              iconClass="fa fa-sign-out"
+              onClick={this.props.logout} />
           </div>
           :
           <div className={style.sidebar__mobileMenu__authorizationBlock__nonAuthorizedBlock}>
