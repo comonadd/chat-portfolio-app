@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "description": "The chat application for my portfolio",
   "main": "server/index.js",
-  "scripts": {
-    "start": "cd client && yarn install && yarn run build:release && cd - && DEV=0 PORT=80 node server/index.js"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/wrongway4you/chat_portfolio_app.git"
@@ -29,5 +26,7 @@
     "express": "^4.15.3",
     "winston": "^2.3.1"
   },
-  "devDependencies": {}
+  "scripts": {
+    "start": "DEV=0 PORT=80 node server/index.js"
+  }
 }
