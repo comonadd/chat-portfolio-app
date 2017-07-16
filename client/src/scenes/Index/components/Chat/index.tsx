@@ -7,28 +7,33 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect as reactReduxConnect } from 'react-redux';
 import PropTypes from 'prop-types';
+import {
+  firebaseConnect,
+  isLoaded,
+  isEmpty,
+  dataToJS,
+  pathToJS,
+} from 'react-redux-firebase'
 
-import { fetchMessages, addMsg, State as MessagesState } from 'store/ducks/messages';
 import { addNotification } from 'store/ducks/notifications';
-import { State as UserState } from 'store/ducks/user';
-import { State as UsersState } from 'store/ducks/users';
 import { RootState, Dispatch } from 'store/types';
 import Loader from 'components/Loader';
 import MessagesPane, { MessageProps } from './components/MessagesPane';
 import NewMessageBar from './components/NewMessageBar';
 const style = require('./style');
 
-type ChatState = {
+type State = {
 };
 
 interface OwnProps {}
 
-interface ChatProps extends OwnProps {
-  messages: MessagesState;
-  user: UserState;
-  users: UsersState;
-  addMsg: typeof addMsg;
-  fetchMessages: typeof fetchMessages;
+interface ConnectedProps {
+  firebase: any;
+  messages: any;
+  users: any;
+  auth: any;
+  authError: any;
+  profile: any;
   addNotification: typeof addNotification;
 }
 
@@ -36,11 +41,11 @@ interface ChatProps extends OwnProps {
  * @summary
  * The component that represents the chat.
  */
-class Chat extends React.Component<ChatProps, ChatState> {
+class Chat extends React.Component<OwnProps & ConnectedProps, State> {
   /**
    * @summary The initial state.
    */
-  state: ChatState = {
+  state: State = {
   };
 
   constructor(...args: any[]) {
@@ -61,11 +66,14 @@ class Chat extends React.Component<ChatProps, ChatState> {
    * @return {undefined}
    */
   onNewMsgSend(text: string) {
-    if (this.props.user.isAuthorized) {
-      this.props.addMsg(
-        this.props.user,
+    if (!isEmpty(this.props.auth)) {
+      console.log('Chat::onNewMsgSend():');
+      console.log(this.props);
+      this.props.firebase.push('messages/items', {
         text,
-      );
+        date: Date.now(),
+        authorID: this.props.auth.uid,
+      });
     } else {
       this.props.addNotification(
         'error',
@@ -74,32 +82,37 @@ class Chat extends React.Component<ChatProps, ChatState> {
     }
   }
 
-  componentWillMount() {
-    this.props.fetchMessages(0, 10);
-  }
-
   render() {
+    const messages = this.props.messages || {};
+    const users = this.props.users || {};
+
+    console.log('Chat::render():');
+    console.log(users);
+
     return (
       <div className={style.chat}>
         <MessagesPane
-          items={this.props.messages.items}
-          users={this.props.users.items}
-          loading={this.props.messages.loading} />
+          items={messages.items}
+          isEmpty={isEmpty(messages.items)}
+          users={users}
+          loading={!isLoaded(messages.items)} />
         <NewMessageBar onSend={this.onNewMsgSend} />
       </div>
     );
   }
 }
 
-export default reactReduxConnect(
+export default firebaseConnect([
+  'messages',
+  'users',
+])(reactReduxConnect(
   (state: RootState, ownProps: OwnProps) => ({
-    messages: state.messages,
-    user: state.user,
-    users: state.users,
+    authError: pathToJS(state.firebase, 'authError'),
+    auth: pathToJS(state.firebase, 'auth'),
+    profile: pathToJS(state.firebase, 'profile'),
+    messages: dataToJS(state.firebase, 'messages'),
+    users: dataToJS(state.firebase, 'users'),
   }),
   (dispatch: Dispatch) => bindActionCreators({
-    fetchMessages,
-    addMsg,
-    addNotification,
-  }, dispatch),
-)(Chat);
+  }, dispatch)
+)(Chat));

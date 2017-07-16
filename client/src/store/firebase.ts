@@ -19,8 +19,8 @@ const fbConfig = {
 };
 
 // Initialize the Firebase application
-firebase.initializeApp(fbConfig);
+/* firebase.initializeApp(fbConfig);*/
 
-export let fb = firebase;
-export let fbDbRef = firebase.database().ref();
-export let fbStorageRef = firebase.storage().ref();
+/* export let fb = firebase;
+ * export let fbDbRef = firebase.database().ref();
+ * export let fbStorageRef = firebase.storage().ref();*/

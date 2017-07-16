@@ -1,0 +1,33 @@
+/**
+ * The style brief description.
+ *
+ * The style long description.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+.profile-list {
+  &__item {
+    display: flex;
+    margin-bottom: 12px;
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+
+      &__name {
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        font-weight: bold;
+        padding-bottom: 4px;
+        margin-bottom: 4px;
+      }
+
+      &__val {
+        font-size: 12px;
+      }
+    }
+  }
+}
