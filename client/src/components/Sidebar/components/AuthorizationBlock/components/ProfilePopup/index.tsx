@@ -13,6 +13,11 @@ import RootState from 'store/root_state';
 import { addNotification } from 'store/ducks/notifications';
 const style = require('./style');
 
+interface ProfileListItemProps {
+  name: string;
+  val: string;
+}
+
 const ProfileListItem = (props: ProfileListItemProps) =>
   <div className={style.profileList__item}>
     <div className={style.profileList__item__body}>
@@ -27,10 +32,10 @@ const ProfileListItem = (props: ProfileListItemProps) =>
 
 const ProfileList = (props: any) =>
   <div className={style.profileList}>
-    <ProfileListItem img={""} name="Username" val={props.profile.username} />
-    <ProfileListItem img={""} name="Email" val={props.profile.email} />
-    <ProfileListItem img={""} name="Firstname" val={props.profile.firstname} />
-    <ProfileListItem img={""} name="Lastname" val={props.profile.lastname} />
+    <ProfileListItem name="Username" val={props.profile.username} />
+    <ProfileListItem name="Email" val={props.profile.email} />
+    <ProfileListItem name="Firstname" val={props.profile.firstname} />
+    <ProfileListItem name="Lastname" val={props.profile.lastname} />
   </div>;
 
 export interface OwnProps {
