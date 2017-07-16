@@ -93,8 +93,6 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
           value={this.state.newMsg.text}
           onChange={this.onTextChange}
         />
-        {/* {isThereAnError &&
-            <SomeNotifictionThatWouldSayhAboutTheERror />} */}
       </div>
     );
   }
