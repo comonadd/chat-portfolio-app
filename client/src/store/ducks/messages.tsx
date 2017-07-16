@@ -77,17 +77,16 @@ export const fetchMessages = (startPostTime: number, n: number) => (dispatch) =>
   fbMessagesItemsDbRef
     .orderByChild('date')
     .startAt(startPostTime)
-    .limitToFirst(n)
+    .limitToLast(n)
     .on('value', (snapshot) => {
-      const val = snapshot.val();
-      console.log(val);
+      const val = snapshot.val() || {};
 
       // Fetch the users data of all the messages
       const usersUsernames = Object.keys(val).map(key => val[key].authorUsername)
       new Promise((resolve) => resolve(dispatch(fetchUsers(usersUsernames)))).then(() => {
         dispatch({
           type: ActionType.FETCH_MESSAGES,
-          payload: val || {},
+          payload: val,
         });
 
         /* Disable "loading" state */
