@@ -5,24 +5,10 @@
 
 import React from 'react';
 import classnames from 'classnames';
+import { push as reactRouterReduxPush } from 'react-router-redux';
 
-const sourceCodeNavItemIcon = require('img/source_code_nav_item.png');
-const githubIssuesNavItemIcon = require('img/github_issues_nav_item.png');
-const githubPullRequestNavItemIcon = require('img/github_pull_request_nav_item.png');
+import SidebarButton from '../Button';
 const style = require('components/Sidebar/style');
-
-interface NavigationItemProps {
-  name: string;
-  iconClass: string;
-}
-
-const NavigationItem = (props: NavigationItemProps) =>
-  <div className={style.sidebar__btn__content}>
-    <span className={classnames([style.sidebar__btn__content__icon, props.iconClass])}></span>
-    <span className={style.sidebar__btn__content__text}>
-      {props.name}
-    </span>
-  </div>;
 
 /**
  * @summary
@@ -45,41 +31,40 @@ export default class Navigation extends React.Component<NavigationProps, Navigat
   static items: any = [
     {
       name: 'Source Code',
+      rel: false,
       url: `${Navigation.projectGithubLink}`,
-      innerElem: <NavigationItem name="Source Code" iconClass="octicon octicon-repo" />,
+      iconClass: "octicon octicon-repo",
     },
     {
       name: 'Issues',
+      rel: false,
       url: `${Navigation.projectGithubLink}/issues`,
-      innerElem: <NavigationItem name="Issues" iconClass="octicon octicon-issue-opened" />,
+      iconClass: "octicon octicon-issue-opened",
     },
     {
       name: 'Pull Requests',
+      rel: false,
       url:`${Navigation.projectGithubLink}/pulls`,
-      innerElem: <NavigationItem name="Pull Requests" iconClass="octicon octicon-git-pull-request" />,
+      iconClass: "octicon octicon-git-pull-request",
     },
   ];
 
-  constructor(...args: any[]) {
-    // Call the parent class constructor
-    super(...args);
-
-    // Initialize the state
-    this.state = {};
-  }
+  static state: NavigationState = {};
 
   render() {
     return (
       <div className={style.sidebar__mobileMenu__nav}>
         {Navigation.items.map((item: any) =>
-          <div
+          <SidebarButton
             key={item.name}
             title={item.name}
-            className={style.sidebar__btn}>
-            <a href={item.url}>
-              {item.innerElem}
-            </a>
-          </div>)}
+            name={item.name}
+            iconClass={item.iconClass}
+            onClick={
+              item.rel ?
+               () => reactRouterReduxPush(item.url) :
+               () => window.location.href = item.url
+            } />)}
       </div>
     );
   }
