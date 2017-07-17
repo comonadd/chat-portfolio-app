@@ -10,8 +10,12 @@
  * @license MIT
  */
 
+@import "vars";
+
 :global ::-webkit-scrollbar {
-  // nothing there
+  width: $scroll-bar___length;
+  height: $scroll-bar___length;
+  background: $scroll-bar___background;
 }
 
 :global ::-webkit-scrollbar-button {
@@ -27,7 +31,21 @@
 }
 
 :global ::-webkit-scrollbar-thumb {
-  // nothing there
+  width: $scroll-bar__thumb___length;
+  height: $scroll-bar__thumb___length;
+  background: $scroll-bar__thumb___background;
+
+  &:hover {
+    background: $scroll-bar__thumb_hover___background
+  }
+
+  &:focus {
+    background: $scroll-bar__thumb_focus___background
+  }
+
+  &:active {
+    background: $scroll-bar__thumb_active___background
+  }
 }
 
 :global ::-webkit-scrollbar-corner {
