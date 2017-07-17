@@ -8,6 +8,8 @@
  * @license MIT
  */
 
+@import "~include-media/dist/_include-media.scss";
+
 @mixin scene {
   display: flex;
   width: 100%;
