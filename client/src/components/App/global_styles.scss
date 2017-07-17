@@ -55,7 +55,8 @@ a {
 }
 
 /* The input elemnent */
-input {
+input,
+textarea {
   $border___clr: #eee;
   $clr: $body___color;
 
