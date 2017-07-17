@@ -46,7 +46,7 @@ const generate_random_lastname = () => randomChoice([
  */
 export const isUpper = (ch: string) => ch.toUpperCase() == ch;
 
-export const getUserAvatarBackgroundColor = (firstname: string, lastname: string) => {
+export const getUserAvatarBackgroundColor = (username: string) => {
   const hash = (str: string) => {
     let hash = 0, i, chr;
     if (str.length === 0) return hash;
@@ -60,7 +60,7 @@ export const getUserAvatarBackgroundColor = (firstname: string, lastname: string
   };
 
   const a = [0, 0, 0].map(() => {
-    let res = (hash(firstname) ^ hash(lastname)) * 255 % 255
+    let res = (hash(username)) * 255 % 255
     res = res >= 190 ? 190 : res;
     return res;
   });

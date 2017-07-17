@@ -4,37 +4,23 @@
  */
 
 import React from 'react';
-const Color = require('color');
 
-import util from 'src/util';
+import UserAvatar from 'components/UserAvatar';
 const style = require('./style');
 
 interface MessageLeftProps {
   author: {
-    firstname: string;
-    lastname: string;
+    username: string,
+    firstname: string,
+    lastname: string,
   };
 }
 
 const MessageLeft = (props: MessageLeftProps) => {
-  const doesAvatarExists = false;
-
-  // Generate the user's avatar background color
-  const backgroundColor = util.getUserAvatarBackgroundColor(
-    props.author.firstname,
-    props.author.lastname,
-  );
-
   return (
     <div className={style.msg__left}>
       <div className={style.msg__left__authorAvatar}>
-        {doesAvatarExists ? <img src={''}/> :
-         <div className={style.msg__left__authorAvatar__synteticImage}
-              style={{background: backgroundColor, color: '#fff', }}>
-           <span>
-             {`${props.author.firstname[0]} ${props.author.lastname[0]}`}
-           </span>
-         </div>}
+        <UserAvatar displayFullName={false} user={props.author} />
       </div>
     </div>
   );
