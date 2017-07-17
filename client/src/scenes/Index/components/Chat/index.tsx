@@ -60,7 +60,7 @@ class Chat extends React.Component<OwnProps & ConnectedProps, State> {
            items={messages.items}
            isEmpty={isEmpty(messages.items) || isEmpty(users)}
            users={users}
-           loading={this.props.messagesLoading || this.props.usersLoading} />
+           loading={!(isLoaded(this.props.messages) || isLoaded(this.props.users))} />
         <NewMessageBar />
       </div>
     );
@@ -76,9 +76,7 @@ export default firebaseConnect([
     authError: pathToJS(state.firebase, 'authError'),
     profile: pathToJS(state.firebase, 'profile'),
     messages: dataToJS(state.firebase, 'messages'),
-    messagesLoading: customToJS(state.firebase, 'messages', 'requesting'),
     users: dataToJS(state.firebase, 'users'),
-    usersLoading: customToJS(state.firebase, 'users', 'requesting'),
   }),
   (dispatch: Dispatch) => bindActionCreators({
     addNotification,
