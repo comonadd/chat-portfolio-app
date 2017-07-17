@@ -14,8 +14,8 @@
   border-bottom: 1px solid #eee;
   padding: $msg___padding;
   display: flex;
+  flex-shrink: 0;
 
-  /* The last shown message */
   &:last-child {
     border-bottom: none;
   }

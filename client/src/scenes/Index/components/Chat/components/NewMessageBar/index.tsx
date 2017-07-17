@@ -82,7 +82,7 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
   onSend(event: React.MouseEvent<HTMLButtonElement>): void {
     if (this.checkText()) {
       if (!isEmpty(this.props.auth)) {
-        this.props.firebase.push('messages/items', {
+        this.props.firebase.push('messages', {
           text: this.state.newMsg.text,
           date: Date.now(),
           authorID: this.props.auth.uid,

@@ -8,6 +8,8 @@
  * @license MIT
  */
 
+@import "mixins";
+
 /* The messages pane */
 .messages-pane {
   flex-grow: 1;
@@ -25,15 +27,20 @@
     align-items: center;
     padding: 0 16px;
     border-bottom: 1px solid #eee;
+
+    @include media("<=tablet") {
+      display: none;
+    }
   }
 
   /* The messages list */
   &__msgs-list {
-    flex-grow: 1;
-    flex-shrink: 1;
-    flex-basis: 100%;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    background-color: #fff;
+    height: 0;
+    overflow-y: auto;
 
     &__no-msgs-msg {
       height: 100%;

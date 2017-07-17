@@ -57,8 +57,8 @@ class Chat extends React.Component<OwnProps & ConnectedProps, State> {
     return (
       <div className={style.chat}>
          <MessagesPane
-           items={messages.items}
-           isEmpty={isEmpty(messages.items) || isEmpty(users)}
+           items={messages}
+           isEmpty={isEmpty(messages) || isEmpty(users)}
            users={users}
            loading={!(isLoaded(this.props.messages) || isLoaded(this.props.users))} />
         <NewMessageBar />
@@ -68,7 +68,7 @@ class Chat extends React.Component<OwnProps & ConnectedProps, State> {
 }
 
 export default firebaseConnect([
-  'messages',
+  {path: 'messages', queryParams: ['orderByKey']},
   'users',
 ])(reactReduxConnect(
   (state: RootState, ownProps: OwnProps) => ({
