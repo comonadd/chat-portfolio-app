@@ -6,6 +6,7 @@
 import React from 'react';
 const Color = require('color');
 
+import util from 'src/util';
 const style = require('./style');
 
 interface MessageLeftProps {
@@ -18,29 +19,8 @@ interface MessageLeftProps {
 const MessageLeft = (props: MessageLeftProps) => {
   const doesAvatarExists = false;
 
-  const getUserAvatarBackgroundColor = (firstname: string, lastname: string) => {
-    const hash = (str: string) => {
-      let hash = 0, i, chr;
-      if (str.length === 0) return hash;
-      for (i = 0; i < str.length; i++) {
-        chr   = str.charCodeAt(i);
-        hash  = ((hash << 5) - hash) + chr;
-        // Convert to 32bit integer
-        hash |= 0;
-      }
-      return hash;
-    };
-
-    const a = [0, 0, 0].map(() => {
-      let res = (hash(props.author.firstname) ^ hash(props.author.lastname)) * 255 % 255
-      res = res >= 190 ? 190 : res;
-      return res;
-    });
-    return Color.rgb(a[0], a[1], a[2]).string();
-  };
-
   // Generate the user's avatar background color
-  const backgroundColor = getUserAvatarBackgroundColor(
+  const backgroundColor = util.getUserAvatarBackgroundColor(
     props.author.firstname,
     props.author.lastname,
   );
