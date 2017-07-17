@@ -127,7 +127,6 @@ class Navigation extends React.Component<OwnProps & ConnectedProps, State> {
       email,
       password,
     }).then(() => {
-      this.props.firebase.update();
       this.props.addNotification('success', 'Successfull log-in');
     }).catch((err) => {
       this.props.addNotification('error', err.message);
@@ -143,7 +142,6 @@ class Navigation extends React.Component<OwnProps & ConnectedProps, State> {
       {email, password},
       {username, email, firstname, lastname},
     ).then(() => {
-      this.props.firebase.update();
       this.props.addNotification('success', 'Successfull registration');
     }).catch((err) => {
       this.props.addNotification('error', err.message);
