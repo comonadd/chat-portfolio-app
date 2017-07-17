@@ -79,13 +79,13 @@ const firebaseConfig = {
 // Create the store
 export default reduxCompose(
   reactReduxFirebase(firebaseConfig, {
-    userProfile: 'users',
+    userProfile: '/users',
     enableLogging: __DEBUG__,
-    profileFactory: (userData: any) => ({
-      email: userData.email,
-      username: userData.username,
-      firstname: userData.firstname,
-      lastname: userData.lastname,
+    profileFactory: (userData: any, profile: any) => ({
+      email: profile.email,
+      username: profile.username,
+      firstname: profile.firstname,
+      lastname: profile.lastname,
     }),
   }))(createStore)(
     rootReducer,

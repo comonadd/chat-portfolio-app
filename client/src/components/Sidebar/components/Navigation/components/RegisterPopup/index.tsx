@@ -26,7 +26,7 @@ interface OwnProps {
     email: string,
     firstname: string,
     lastname: string
-  ) => boolean;
+  ) => void;
   onRemoval: () => void;
 }
 
@@ -122,7 +122,11 @@ class RegisterPopup extends React.Component<RegisterPopupProps, RegisterPopupSta
   }
 
   checkEmailField() {
-    // TODO: Check the email field
+    if (!util.EMAIL_REGEX.test(this.state.email)) {
+      this.showErrorMessage('Entered Email address is badly formatted');
+      return false;
+    }
+
     return true;
   }
 
@@ -236,11 +240,10 @@ class RegisterPopup extends React.Component<RegisterPopupProps, RegisterPopupSta
   }
 }
 
-const mapStateToProps = (state: RootState, ownProps: OwnProps) => ({
-});
-
-const mapDispatchToProps = (dispatch: any) => bindActionCreators({
-  addNotification,
-}, dispatch);
-
-export default reactReduxConnect(mapStateToProps, mapDispatchToProps)(RegisterPopup);
+export default reactReduxConnect(
+  (state: RootState, ownProps: OwnProps) => ({
+  }),
+  (dispatch: any) => bindActionCreators({
+    addNotification,
+  }, dispatch),
+)(RegisterPopup);

@@ -6,7 +6,6 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect as reactReduxConnect } from 'react-redux';
-import PropTypes from 'prop-types';
 import {
   firebaseConnect,
   isLoaded,
@@ -111,5 +110,6 @@ export default firebaseConnect([
     users: dataToJS(state.firebase, 'users'),
   }),
   (dispatch: Dispatch) => bindActionCreators({
+    addNotification,
   }, dispatch)
 )(Chat));

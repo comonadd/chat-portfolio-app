@@ -7,13 +7,14 @@ import React from 'react';
 import { connect as reactReduxConnect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
+import util from 'src/util';
 import Popup from 'components/Popup';
 import RootState from 'store/root_state';
 import { addNotification } from 'store/ducks/notifications';
 const style = require('../../../../style');
 
 export interface OwnProps {
-  onSubmit: (email: string, password: string) => boolean;
+  onSubmit: (email: string, password: string) => void;
   onRemoval: () => void;
 }
 
@@ -39,6 +40,9 @@ class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
 
     // Bind member methods
     this.onFormChange = this.onFormChange.bind(this);
+    this.showErrorMessage = this.showErrorMessage.bind(this);
+    this.checkFields = this.checkFields.bind(this);
+    this.onSubmit = this.onSubmit.bind(this);
   }
 
   onFormChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -49,6 +53,30 @@ class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
       ...this.state,
       [name]: value,
     });
+  }
+
+  showErrorMessage(msg: string): void {
+    this.props.addNotification('error', msg);
+  }
+
+  checkEmailField(): boolean {
+    if (!util.EMAIL_REGEX.test(this.state.email)) {
+      this.showErrorMessage('The Email is badly formatted');
+      return false;
+    }
+    return true;
+  }
+
+  checkFields(): boolean {
+    return this.checkEmailField();
+  }
+
+  onSubmit(e: any) {
+    e.preventDefault();
+
+    if (this.checkFields()) {
+      this.props.onSubmit(this.state.email, this.state.password);
+    }
   }
 
   render() {
@@ -73,7 +101,7 @@ class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
             onChange={this.onFormChange}/>
           <button
             type="submit"
-            onClick={() => this.props.onSubmit(this.state.email, this.state.password)}>
+            onClick={this.onSubmit}>
             Login
           </button>
         </form>

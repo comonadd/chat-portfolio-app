@@ -5,6 +5,8 @@
 
 const Color = require('color');
 
+export const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+
 const randomChoice = (arr: any[]) => arr[Math.random() % arr.length];
 
 const generate_random_username = () => {
@@ -59,8 +61,8 @@ export const getUserAvatarBackgroundColor = (username: string) => {
     return hash;
   };
 
-  const a = [0, 0, 0].map(() => {
-    let res = (hash(username)) * 255 % 255
+  const a = [0, 0, 0].map((_, index: number) => {
+    let res = hash(username) ^ index * 255 % 255
     res = res >= 190 ? 190 : res;
     return res;
   });
@@ -68,6 +70,7 @@ export const getUserAvatarBackgroundColor = (username: string) => {
 };
 
 export default {
+  EMAIL_REGEX,
   isUpper,
   getUserAvatarBackgroundColor,
 };

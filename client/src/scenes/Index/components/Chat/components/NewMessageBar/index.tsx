@@ -4,29 +4,35 @@
  */
 
 import React from 'react';
+import { bindActionCreators } from 'redux';
+import { connect as reactReduxConnect } from 'react-redux';
 
+import { Dispatch, RootState } from 'store/types';
+import { addNotification } from 'store/ducks/notifications';
 const style = require('./style');
 
-export type NewMessageBarProps = {
-  onSend: (text: string) => void,
+export interface OwnProps {
+  onSend: (text: string) => void;
+};
+
+interface ConnectedProps {
+  addNotification: typeof addNotification;
 }
 
-type NewMessageBarState = {
+type State = {
   newMsg: {
     text: string;
   },
-  errorMessage: string,
 }
 
-export default class NewMessageBar extends React.Component<NewMessageBarProps, NewMessageBarState> {
+class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
   /**
    * @summary The initial state.
    */
-  state: NewMessageBarState = {
+  state: State = {
     newMsg: {
       text: '',
     },
-    errorMessage: '',
   };
 
   constructor(...args: any[]) {
@@ -34,23 +40,20 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
     super(...args);
 
     // Bind member methods
-    this.setErrorMessage = this.setErrorMessage.bind(this);
+    this.showErrorMessage = this.showErrorMessage.bind(this);
     this.checkText = this.checkText.bind(this);
     this.onSend = this.onSend.bind(this);
     this.onTextChange = this.onTextChange.bind(this);
     this.resetNewMsg = this.resetNewMsg.bind(this);
   }
 
-  setErrorMessage(msg: string): void {
-    this.setState({
-      ...this.state,
-      errorMessage: msg,
-    });
+  showErrorMessage(msg: string): void {
+    this.props.addNotification('error', msg);
   }
 
   checkText(): boolean {
     if (this.state.newMsg.text.length == 0) {
-      this.setErrorMessage('The message is empty');
+      this.showErrorMessage('The message is empty');
       return false;
     }
 
@@ -87,8 +90,6 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
   }
 
   render(): JSX.Element {
-    const isThereAnError = this.state.errorMessage.length != 0;
-
     return (
       <div className={style.newMessageBar}>
         <button
@@ -109,3 +110,11 @@ export default class NewMessageBar extends React.Component<NewMessageBarProps, N
     );
   }
 }
+
+export default reactReduxConnect(
+  (state: RootState, ownProps: OwnProps) => ({
+  }),
+  (dispatch: Dispatch) => bindActionCreators({
+    addNotification,
+  }, dispatch)
+)(NewMessageBar);

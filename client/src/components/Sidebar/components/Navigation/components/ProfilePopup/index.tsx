@@ -65,7 +65,7 @@ interface ConnectedProps {
 interface State {
 }
 
-class LoginPopup extends React.Component<OwnProps & ConnectedProps, State> {
+class ProfilePopup extends React.Component<OwnProps & ConnectedProps, State> {
   state: State = {};
 
   render() {
@@ -91,4 +91,4 @@ export default firebaseConnect()(reactReduxConnect(
   (dispatch: any) => bindActionCreators({
     addNotification,
   }, dispatch),
-)(LoginPopup));
+)(ProfilePopup));
