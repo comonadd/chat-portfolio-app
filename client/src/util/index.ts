@@ -61,8 +61,11 @@ export const getUserAvatarBackgroundColor = (username: string) => {
     return hash;
   };
 
+  // Calculate the username hash
+  const usernameHash = hash(username);
+
   const a = [0, 0, 0].map((_, index: number) => {
-    let res = hash(username) ^ index * 255 % 255
+    let res = Math.abs((usernameHash ^ ((index * 2398237) & 8923498239)) % 255);
     res = res >= 190 ? 190 : res;
     return res;
   });
