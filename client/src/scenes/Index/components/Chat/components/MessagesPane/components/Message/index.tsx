@@ -18,16 +18,32 @@ interface MessageLeftProps {
 const MessageLeft = (props: MessageLeftProps) => {
   const doesAvatarExists = false;
 
-  const generateRandomAvatarBackgroundColor = () => {
+  const getUserAvatarBackgroundColor = (firstname: string, lastname: string) => {
+    const hash = (str: string) => {
+      let hash = 0, i, chr;
+      if (str.length === 0) return hash;
+      for (i = 0; i < str.length; i++) {
+        chr   = str.charCodeAt(i);
+        hash  = ((hash << 5) - hash) + chr;
+        // Convert to 32bit integer
+        hash |= 0;
+      }
+      return hash;
+    };
+
     const a = [0, 0, 0].map(() => {
-      let res = Math.random() * 255 % 255
+      let res = (hash(props.author.firstname) ^ hash(props.author.lastname)) * 255 % 255
       res = res >= 190 ? 190 : res;
       return res;
     });
     return Color.rgb(a[0], a[1], a[2]).string();
   };
 
-  const backgroundColor = generateRandomAvatarBackgroundColor();
+  // Generate the user's avatar background color
+  const backgroundColor = getUserAvatarBackgroundColor(
+    props.author.firstname,
+    props.author.lastname,
+  );
 
   return (
     <div className={style.msg__left}>
