@@ -43,6 +43,22 @@ class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
     this.showErrorMessage = this.showErrorMessage.bind(this);
     this.checkFields = this.checkFields.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.handleDocumentKeyPress = this.handleDocumentKeyPress.bind(this);
+  }
+
+  handleDocumentKeyPress(ev: any) {
+    if (ev.keyCode == 13) {
+      // "Enter" was pressed
+      this.onSubmit();
+    }
+  }
+
+  componentWillMount() {
+    document.addEventListener('keydown', this.handleDocumentKeyPress, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleDocumentKeyPress, false);
   }
 
   onFormChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -71,7 +87,7 @@ class LoginPopup extends React.Component<LoginPopupProps, LoginPopupState> {
     return this.checkEmailField();
   }
 
-  onSubmit(e: any) {
+  onSubmit(e?: any) {
     e.preventDefault();
 
     if (this.checkFields()) {

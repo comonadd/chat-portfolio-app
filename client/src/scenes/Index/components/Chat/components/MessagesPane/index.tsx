@@ -60,15 +60,15 @@ export default class MessagesPane extends React.Component<MessagesPaneProps, Mes
         </div>
         <div className={style.messagesPane__msgsList}>
           {
-            (this.props.isEmpty && this.props.loading) ? loader :
-            this.props.isEmpty ? thereIsNoMessagesMsg :
-            Object.keys(messages).map((id: string) => {
-              const msg: any = messages[id];
-              const author: any = users[msg.authorID] || UNKNOWN_USER;
-              return (
-                <Message key={id} author={author} {...msg} />
-              );
-            })
+             this.props.loading ? loader :
+             this.props.isEmpty ? thereIsNoMessagesMsg :
+             Object.keys(messages).map((id: string) => {
+               const msg: any = messages[id];
+               const author: any = users[msg.authorID] || UNKNOWN_USER;
+               return (
+                 <Message key={id} author={author} {...msg} />
+               );
+             })
           }
         </div>
       </div>

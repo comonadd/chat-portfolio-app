@@ -12,6 +12,7 @@ import {
   isEmpty,
   dataToJS,
   pathToJS,
+  customToJS,
 } from 'react-redux-firebase'
 
 import { addNotification } from 'store/ducks/notifications';
@@ -34,6 +35,8 @@ interface ConnectedProps {
   authError: any;
   profile: any;
   addNotification: typeof addNotification;
+  messagesLoading: boolean;
+  usersLoading: boolean;
 }
 
 /**
@@ -47,52 +50,18 @@ class Chat extends React.Component<OwnProps & ConnectedProps, State> {
   state: State = {
   };
 
-  constructor(...args: any[]) {
-    // Call the super constructor
-    super(...args);
-
-    // Bind member methods
-    this.onNewMsgSend = this.onNewMsgSend.bind(this);
-  }
-
-  /**
-   * @summary
-   * This is the function which gets called when a new message
-   * is sent by the user.
-   *
-   * @param {string} text - The text of the message.
-   *
-   * @return {undefined}
-   */
-  onNewMsgSend(text: string) {
-    if (!isEmpty(this.props.auth)) {
-      console.log('Chat::onNewMsgSend():');
-      console.log(this.props);
-      this.props.firebase.push('messages/items', {
-        text,
-        date: Date.now(),
-        authorID: this.props.auth.uid,
-      });
-    } else {
-      this.props.addNotification(
-        'error',
-        'You must be authenticated in order to send messages',
-      );
-    }
-  }
-
   render() {
     const messages = this.props.messages || {};
     const users = this.props.users || {};
 
     return (
       <div className={style.chat}>
-        <MessagesPane
-          items={messages.items}
-          isEmpty={isEmpty(messages.items)}
-          users={users}
-          loading={!isLoaded(messages.items)} />
-        <NewMessageBar onSend={this.onNewMsgSend} />
+         <MessagesPane
+           items={messages.items}
+           isEmpty={isEmpty(messages.items) || isEmpty(users)}
+           users={users}
+           loading={this.props.messagesLoading || this.props.usersLoading} />
+        <NewMessageBar />
       </div>
     );
   }
@@ -103,11 +72,13 @@ export default firebaseConnect([
   'users',
 ])(reactReduxConnect(
   (state: RootState, ownProps: OwnProps) => ({
-    authError: pathToJS(state.firebase, 'authError'),
     auth: pathToJS(state.firebase, 'auth'),
+    authError: pathToJS(state.firebase, 'authError'),
     profile: pathToJS(state.firebase, 'profile'),
     messages: dataToJS(state.firebase, 'messages'),
+    messagesLoading: customToJS(state.firebase, 'messages', 'requesting'),
     users: dataToJS(state.firebase, 'users'),
+    usersLoading: customToJS(state.firebase, 'users', 'requesting'),
   }),
   (dispatch: Dispatch) => bindActionCreators({
     addNotification,

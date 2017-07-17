@@ -6,17 +6,27 @@
 import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect as reactReduxConnect } from 'react-redux';
+import {
+  firebaseConnect,
+  isLoaded,
+  isEmpty,
+  dataToJS,
+  pathToJS,
+} from 'react-redux-firebase'
 
 import { Dispatch, RootState } from 'store/types';
 import { addNotification } from 'store/ducks/notifications';
 const style = require('./style');
 
 export interface OwnProps {
-  onSend: (text: string) => void;
 };
 
 interface ConnectedProps {
+  auth: any;
+  authError: any;
+  profile: any;
   addNotification: typeof addNotification;
+  firebase: any;
 }
 
 type State = {
@@ -71,12 +81,23 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
 
   onSend(event: React.MouseEvent<HTMLButtonElement>): void {
     if (this.checkText()) {
-      this.props.onSend(this.state.newMsg.text);
+      if (!isEmpty(this.props.auth)) {
+        this.props.firebase.push('messages/items', {
+          text: this.state.newMsg.text,
+          date: Date.now(),
+          authorID: this.props.auth.uid,
+        });
+      } else {
+        this.props.addNotification(
+          'error',
+          'You must be authenticated in order to send messages',
+        );
+      }
       this.resetNewMsg();
     }
   }
 
-  onTextChange(event: React.ChangeEvent<HTMLInputElement>): void {
+  onTextChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
     const name = event.target.name;
     const value = event.target.value;
 
@@ -98,10 +119,9 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
         >
           Send
         </button>
-        <input
+        <textarea
           className={style.newMessageBar__field}
           name="text"
-          type="text"
           value={this.state.newMsg.text}
           onChange={this.onTextChange}
           onKeyPress={(e: any) => (e.key == 'Enter') ? this.onSend(undefined) : undefined}
@@ -111,10 +131,14 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
   }
 }
 
-export default reactReduxConnect(
+export default firebaseConnect([
+])(reactReduxConnect(
   (state: RootState, ownProps: OwnProps) => ({
+    authError: pathToJS(state.firebase, 'authError'),
+    auth: pathToJS(state.firebase, 'auth'),
+    profile: pathToJS(state.firebase, 'profile'),
   }),
   (dispatch: Dispatch) => bindActionCreators({
     addNotification,
   }, dispatch)
-)(NewMessageBar);
+)(NewMessageBar));

@@ -64,6 +64,22 @@ class RegisterPopup extends React.Component<RegisterPopupProps, RegisterPopupSta
     this.checkFields = this.checkFields.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.onFormChange = this.onFormChange.bind(this);
+    this.handleDocumentKeyPress = this.handleDocumentKeyPress.bind(this);
+  }
+
+  handleDocumentKeyPress(ev: any) {
+    if (ev.keyCode == 13) {
+      // "Enter" was pressed
+      this.onSubmit();
+    }
+  }
+
+  componentWillMount() {
+    document.addEventListener('keydown', this.handleDocumentKeyPress, false);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('keydown', this.handleDocumentKeyPress, false);
   }
 
   /**
@@ -168,7 +184,7 @@ class RegisterPopup extends React.Component<RegisterPopupProps, RegisterPopupSta
     );
   }
 
-  onSubmit(event: React.MouseEvent<HTMLButtonElement>) {
+  onSubmit(event?: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
 
     if (this.checkFields()) {

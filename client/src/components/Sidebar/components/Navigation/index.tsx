@@ -18,6 +18,7 @@ import {
   dataToJS,
   pathToJS,
 } from 'react-redux-firebase'
+import { push as reactRouterReduxPush } from 'react-router-redux';
 
 import { addNotification } from 'store/ducks/notifications';
 import { Dispatch, RootState } from 'store/types';
@@ -37,6 +38,7 @@ interface ConnectedProps {
   authError: any;
   profile: any;
   addNotification: typeof addNotification,
+  reactRouterReduxPush: typeof reactRouterReduxPush,
 }
 
 /**
@@ -125,6 +127,7 @@ class Navigation extends React.Component<OwnProps & ConnectedProps, State> {
       email,
       password,
     }).then(() => {
+      this.props.firebase.update();
       this.props.addNotification('success', 'Successfull log-in');
     }).catch((err) => {
       this.props.addNotification('error', err.message);
@@ -140,6 +143,7 @@ class Navigation extends React.Component<OwnProps & ConnectedProps, State> {
       {email, password},
       {username, email, firstname, lastname},
     ).then(() => {
+      this.props.firebase.update();
       this.props.addNotification('success', 'Successfull registration');
     }).catch((err) => {
       this.props.addNotification('error', err.message);
@@ -148,6 +152,7 @@ class Navigation extends React.Component<OwnProps & ConnectedProps, State> {
 
   onLogout() {
     this.props.firebase.logout();
+    this.props.reactRouterReduxPush('/');
   }
 
   toggleMobileMenu() {
@@ -274,5 +279,6 @@ export default firebaseConnect()(reactReduxConnect(
   }),
   (dispatch: Dispatch) => bindActionCreators({
     addNotification,
+    reactRouterReduxPush,
   }, dispatch)
 )(Navigation));
