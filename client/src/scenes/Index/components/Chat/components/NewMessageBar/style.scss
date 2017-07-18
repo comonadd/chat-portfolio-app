@@ -40,7 +40,7 @@
     flex-grow: 1;
     flex-shrink: 0;
     font-size: 12px;
-    resize: false;
+    resize: none;
 
     @include media("<=tablet") {
       flex-basis: 64px;
