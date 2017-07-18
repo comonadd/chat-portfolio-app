@@ -19,6 +19,7 @@ import { addNotification } from 'store/ducks/notifications';
 const style = require('./style');
 
 export interface OwnProps {
+  onSend: (text: string) => void;
 };
 
 interface ConnectedProps {
@@ -70,6 +71,13 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
     return true;
   }
 
+  onSend(event: React.MouseEvent<HTMLButtonElement>) {
+    if (this.checkText()) {
+      this.props.onSend(this.state.newMsg.text);
+      this.resetNewMsg();
+    }
+  }
+
   resetNewMsg() {
     this.setState({
       ...this.state,
@@ -78,24 +86,6 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
       },
     });
   };
-
-  onSend(event: React.MouseEvent<HTMLButtonElement>): void {
-    if (this.checkText()) {
-      if (!isEmpty(this.props.auth)) {
-        this.props.firebase.push('messages', {
-          text: this.state.newMsg.text,
-          date: Date.now(),
-          authorID: this.props.auth.uid,
-        });
-      } else {
-        this.props.addNotification(
-          'error',
-          'You must be authenticated in order to send messages',
-        );
-      }
-      this.resetNewMsg();
-    }
-  }
 
   onTextChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
     const name = event.target.name;
@@ -134,9 +124,6 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
 export default firebaseConnect([
 ])(reactReduxConnect(
   (state: RootState, ownProps: OwnProps) => ({
-    authError: pathToJS(state.firebase, 'authError'),
-    auth: pathToJS(state.firebase, 'auth'),
-    profile: pathToJS(state.firebase, 'profile'),
   }),
   (dispatch: Dispatch) => bindActionCreators({
     addNotification,

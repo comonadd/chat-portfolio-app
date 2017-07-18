@@ -35,6 +35,22 @@ export default class MessagesPane extends React.Component<MessagesPaneProps, Mes
   state: MessagesPaneState = {
   };
 
+  msgsList: any;
+
+  constructor(...args: any[]) {
+    super(...args);
+
+    this.scrollDown = this.scrollDown.bind(this);
+  }
+
+  componentDidUpdate() {
+    this.scrollDown();
+  }
+
+  scrollDown() {
+    this.msgsList.scrollTop = this.msgsList.scrollHeight;
+  }
+
   render() {
     const messages = this.props.items || {};
     const users = this.props.users || {};
@@ -44,7 +60,9 @@ export default class MessagesPane extends React.Component<MessagesPaneProps, Mes
         <div className={style.messagesPane__title}>
           <h1>Messages</h1>
         </div>
-        <div className={style.messagesPane__msgsList}>
+        <div
+          ref={(ref) => this.msgsList = ref}
+          className={style.messagesPane__msgsList}>
           {
             this.props.loading ? <Loader /> :
             this.props.isEmpty ?
