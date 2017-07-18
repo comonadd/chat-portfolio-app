@@ -39,20 +39,6 @@ export default class MessagesPane extends React.Component<MessagesPaneProps, Mes
     const messages = this.props.items || {};
     const users = this.props.users || {};
 
-    const thereIsNoMessagesMsg = (
-      <div className={style.messagesPane__msgsList__noMsgsMsg}>
-        <span className={classnames([
-            style.messagesPane__msgsList__noMsgsMsg__icon,
-            "fa", "fa-comment"])}>
-        </span>
-        <span className={style.messagesPane__msgsList__noMsgsMsg__text}>
-          There is no messages yet. Start conversation first!
-        </span>
-      </div>
-    );
-
-    const loader = <Loader />;
-
     return (
       <div className={style.messagesPane}>
         <div className={style.messagesPane__title}>
@@ -60,15 +46,22 @@ export default class MessagesPane extends React.Component<MessagesPaneProps, Mes
         </div>
         <div className={style.messagesPane__msgsList}>
           {
-             this.props.loading ? loader :
-             this.props.isEmpty ? thereIsNoMessagesMsg :
-             Object.keys(messages).map((id: string) => {
-               const msg: any = messages[id];
-               const author: any = users[msg.authorID] || UNKNOWN_USER;
-               return (
-                 <Message key={id} author={author} {...msg} />
-               );
-             })
+            this.props.loading ? <Loader /> :
+            this.props.isEmpty ?
+            <div className={style.messagesPane__msgsList__noMsgsMsg}>
+              <span className={classnames([
+                  style.messagesPane__msgsList__noMsgsMsg__icon,
+                  "fa", "fa-comment"])}>
+              </span>
+              <span className={style.messagesPane__msgsList__noMsgsMsg__text}>
+                There is no messages yet. Start conversation first!
+              </span>
+            </div> :
+            Object.keys(messages).sort().map((msgKey: string) => {
+              const msg = messages[msgKey];
+              const author = users[msg.authorID];
+              return <Message key={msgKey} author={author} {...msg} />;
+            })
           }
         </div>
       </div>
