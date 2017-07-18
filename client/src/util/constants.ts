@@ -14,6 +14,7 @@ export const MIN_USERNAME_LENGTH = 4;
 export const MAX_USERNAME_LENGTH = 24;
 export const MIN_PASSWORD_LENGTH = 4;
 export const MAX_PASSWORD_LENGTH = 64;
+export const AMOUNT_OF_MESSAGES_TO_LOAD = 12;
 
 export default {
   SCENE_STYLE_CLASS,
@@ -21,4 +22,5 @@ export default {
   MAX_USERNAME_LENGTH,
   MIN_PASSWORD_LENGTH,
   MAX_PASSWORD_LENGTH,
+  AMOUNT_OF_MESSAGES_TO_LOAD,
 };

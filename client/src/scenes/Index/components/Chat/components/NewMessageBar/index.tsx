@@ -114,6 +114,7 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
           name="text"
           value={this.state.newMsg.text}
           onChange={this.onTextChange}
+          placeholder="Type your message here"
           onKeyPress={(e: any) => (e.key == 'Enter') ? this.onSend(undefined) : undefined}
         />
       </div>

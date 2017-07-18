@@ -80,7 +80,7 @@ const firebaseConfig = {
 export default reduxCompose(
   reactReduxFirebase(firebaseConfig, {
     userProfile: '/users',
-    enableLogging: __DEBUG__,
+    enableLogging: false,
     profileFactory: (userData: any, profile: any) => ({
       email: profile.email,
       username: profile.username,

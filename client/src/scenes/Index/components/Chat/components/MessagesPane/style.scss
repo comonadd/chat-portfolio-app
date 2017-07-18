@@ -39,8 +39,15 @@
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    height: 0;
-    overflow-y: auto;
+    height: 100%;
+
+    &__items {
+      height: 0;
+      flex-direction: inherit;
+      flex: 1 1 auto;
+      display: flex;
+      overflow-y: auto;
+    }
 
     &__no-msgs-msg {
       height: 100%;
