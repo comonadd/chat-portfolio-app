@@ -59,7 +59,7 @@ interface State {
  * The navigation component.
  */
 class Navigation extends React.Component<OwnProps & ConnectedProps, State> {
-  static projectGithubLink: string = 'https://github.com/wrongway4you/chat_portfolio_app';
+  static projectGithubLink: string = 'https://github.com/wrongway4you/chat-portfolio-app';
 
   /**
    * @summary The initial state.
