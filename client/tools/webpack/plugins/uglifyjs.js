@@ -8,22 +8,28 @@ const webpack = require('webpack');
 module.exports = buildModeConfig => (
   buildModeConfig.minimize ? new webpack.optimize.UglifyJsPlugin({
     compress: {
-      // join consecutive statemets with the “comma operator”
+      // Disable support for IE8
+      screw_ie8: true,
+
+      // Disable warnings
+      warnings: false,
+
+      // Join consecutive statemets with the “comma operator”
       sequences: true,
 
-      // optimize property access: a["foo"] → a.foo
+      // Optimize property access: a["foo"] → a.foo
       properties: true,
 
-      // discard unreachable code
+      // Discard unreachable code
       dead_code: true,
 
-      // discard “debugger” statements
+      // Discard “debugger” statements
       drop_debugger: true,
 
-      // some unsafe optimizations (see below)
+      // Some unsafe optimizations (see below)
       unsafe: false,
 
-      // optimize if-s and conditional expressions
+      // Optimize if-s and conditional expressions
       conditionals: true,
 
       // optimize comparisons
@@ -59,14 +65,15 @@ module.exports = buildModeConfig => (
       // drop side-effect-free statements
       side_effects: true,
 
-      // warn about potentially dangerous optimizations/code
-      warnings: true,
-
       // global definitions
       global_defs: {},
     },
+    mangle: {
+      screw_ie8: true,
+    },
     output: {
       comments: false,
+      screw_ie8: true,
     },
   }) : undefined
 );
