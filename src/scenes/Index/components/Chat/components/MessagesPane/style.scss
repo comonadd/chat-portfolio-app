@@ -1,0 +1,76 @@
+/**
+ * The style brief description.
+ *
+ * The style long description.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+@import "mixins";
+
+/* The messages pane */
+.messages-pane {
+  flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  /* The title */
+  &__title {
+    width: 100%;
+    flex-basis: 80px;
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    border-bottom: 1px solid #eee;
+
+    @include media("<=tablet") {
+      display: none;
+    }
+  }
+
+  /* The messages list */
+  &__msgs-list {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    background-color: #fff;
+    height: 100%;
+
+    &__items {
+      height: 0;
+      flex-direction: inherit;
+      flex: 1 1 auto;
+      display: flex;
+      overflow-y: auto;
+    }
+
+    &__no-msgs-msg {
+      height: 100%;
+      width: 100%;
+      flex: 1 0 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      box-sizing: border-box;
+      text-align: center;
+
+      &__icon {
+        color: #c8c8c8;
+        font-size: 40px;
+        margin-bottom: 10px;
+      }
+
+      &__text {
+        color: #b0b0b0;
+        font-size: 14px;
+      }
+    }
+  }
+}

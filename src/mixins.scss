@@ -1,0 +1,33 @@
+/**
+ * The style brief description.
+ *
+ * The style long description.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+@import "~include-media/dist/_include-media.scss";
+
+@mixin scene {
+  display: flex;
+  width: 100%;
+  flex-basis: 100%;
+  flex-grow: 1;
+  flex-shrink: 0;
+  min-height: 800px;
+  box-sizing: border-box;
+}
+
+@mixin do-not-display-on-tablets-or-less {
+  @include media("<=tablet") {
+    display: none;
+  }
+}
+
+@mixin display-flex-on-tablets-or-less {
+  @include media("<=tablet") {
+    display: flex;
+  }
+}

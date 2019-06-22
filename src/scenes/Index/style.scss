@@ -1,0 +1,15 @@
+/**
+ *  The styles for the `Index` scene.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+@import "mixins";
+
+.index-scene {
+  @include scene;
+
+  flex-direction: column;
+}

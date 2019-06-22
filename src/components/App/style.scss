@@ -1,0 +1,21 @@
+@import "+/vars";
+@import "global_styles";
+@import "webkit_scrollbar";
+@import "~include-media/dist/_include-media.scss";
+
+.app {
+  display: flex;
+  width: 100%;
+  min-height: 100vh;
+  overflow: hidden;
+
+  @include media("<=tablet") {
+    flex-direction: column;
+  }
+
+  &__main {
+    flex-grow: 1;
+    flex-shrink: 0;
+    display: flex;
+  }
+}

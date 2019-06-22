@@ -1,0 +1,65 @@
+/**
+ * The style brief description.
+ *
+ * The style long description.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+.msg {
+  $msg___padding: 20px;
+
+  border-bottom: 1px solid #eee;
+  padding: $msg___padding;
+  display: flex;
+  flex-shrink: 0;
+
+  &:last-child {
+    border-bottom: none;
+  }
+
+  &__left {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: $msg___padding;
+
+    &__author-avatar {
+      overflow: hidden;
+      border-radius: 100%;
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+      /* The author information */
+      &__author {
+        display: flex;
+        font-size: 14px;
+
+        &__fullname {
+          color: #000;
+        }
+
+        &__username {
+          color: gray;
+          margin-left: 8px;
+        }
+      }
+    }
+
+    &__text {
+      font-size: 12px;
+      padding: 12px 0;
+      display: flex;
+      align-items: center;
+    }
+  }
+}

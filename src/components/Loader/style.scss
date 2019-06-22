@@ -1,0 +1,69 @@
+/**
+ * The style brief description.
+ *
+ * The style long description.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+@import "vars";
+
+.loader {
+  $delay: 111ms;
+  $padding: 24px;
+  $anim-translate-y: 12px;
+
+  display: flex;
+  padding: $padding 0;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  box-sizing: border-box;
+
+  &__items {
+    @keyframes colorbars {
+      to {
+        transform: translateY($anim-translate-y);
+      }
+    }
+
+    &__item {
+      display: inline-block;
+      width: 8px;
+      height: 45px;
+      box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
+      transform: translateY(0);
+      animation: colorbars ($delay * 3) alternate infinite cubic-bezier(0.2, 0, 0.5, 1);
+
+      &.loader__items__item_0 {
+        background: red;
+      }
+
+      &.loader__items__item_1 {
+        background: green;
+      }
+
+      &.loader__items__item_2 {
+        background: blue;
+      }
+
+      &.loader__items__item_3 {
+        background: gray;
+      }
+
+      &.loader__items__item_4 {
+        background: white;
+      }
+
+      @for $i from 1 through 5 {
+        &:nth-child(#{$i}) {
+          background: if($i % 2 == 0, $colors__grain, $colors__oxblood);
+          animation-delay: $delay * $i;
+        }
+      }
+    }
+  }
+}

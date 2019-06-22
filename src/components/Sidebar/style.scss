@@ -1,0 +1,165 @@
+/**
+ * The style for the `Header` component.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+@import "vars";
+@import "mixins";
+
+/* The sidebar */
+.sidebar {
+  position: relative;
+  display: flex;
+  background: $sidebar___background;
+  border-right: $sidebar___border-right;
+  flex-basis: $sidebar___width;
+  flex-shrink: 0;
+  flex-grow: 0;
+  box-sizing: border-box;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+
+  /* The styles for the sidebar when the width of the view is a tablet width or less */
+  @include media("<=tablet") {
+    flex-direction: row;
+    border-right: none;
+    border-bottom: $sidebar___border-right;
+
+    .sidebar__nav__items_active {
+      display: flex;
+      position: fixed;
+      flex-direction: column;
+      left: 0;
+      top: $sidebar___width;
+      width: 100%;
+      z-index: 9999;
+
+      .sidebar__nav__item {
+        border-bottom: 1px solid #eee;
+      }
+    }
+  }
+
+  /* The sidebar button */
+  &__btn {
+    $clr: $body___color;
+    $bg: #fff;
+
+    background-color: $bg;
+    color: $clr;
+    font-size: 16px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-basis: $sidebar___width;
+    flex-grow: 0;
+    flex-shrink: 0;
+
+    &:hover {
+      background: darken($bg, 5%);
+      color: darken($clr, 5%);
+      cursor: pointer;
+    }
+
+    &:focus {
+      background: darken($bg, 10%);
+      color: darken($clr, 10%);
+      cursor: pointer;
+    }
+
+    &:active {
+      background: darken($bg, 15%);
+      color: darken($clr, 15%);
+      cursor: default;
+    }
+
+    a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: inherit !important;
+      flex: 1 1 100%;
+      height: 100%;
+    }
+
+    &__content {
+      flex: 1 0 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      img {
+        max-width: 100%;
+        min-width: 100%;
+      }
+
+      .fa,
+      .octicon {
+        color: inherit !important;
+        font-size: 32px !important;
+      }
+
+      &__icon {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex: 0 0 80px;
+      }
+
+      &__text {
+        @include display-flex-on-tablets-or-less;
+
+        display: none;
+        flex: 1 0 100px;
+      }
+    }
+  }
+
+  /* The logotype */
+  &__logotype {
+    flex-grow: 0;
+    flex-shrink: 0;
+    display: flex;
+    height: $sidebar___width;
+    justify-content: center;
+    align-items: center;
+  }
+
+  /* The navigation */
+  &__nav {
+    flex: 1 1 100%;
+    flex-direction: inherit;
+    display: flex;
+
+    @include media("<=tablet") {
+      flex-direction: row-reverse;
+    }
+
+    &__items {
+      @include do-not-display-on-tablets-or-less;
+
+      display: flex;
+      flex-direction: inherit;
+      flex: 1 1 100%;
+
+      @include media(">tablet") {
+        margin-top: 128px;
+      }
+    }
+
+    /* The mobile menu button */
+    &__mobile-menu-btn {
+      @include display-flex-on-tablets-or-less;
+
+      display: none;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+}

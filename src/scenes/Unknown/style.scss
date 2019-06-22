@@ -1,0 +1,35 @@
+/**
+ * The styles for the `Unknown` scene.
+ *
+ * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
+ * @copyright 2017
+ * @license MIT
+ */
+
+@import "mixins";
+
+.unknown-scene {
+  @include scene;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  &__msg {
+    display: flex;
+    padding: 20px;
+    text-align: center;
+    flex-direction: column;
+    box-sizing: border-box;
+
+    &__text {
+      font-size: 24px;
+      padding-bottom: 8px;
+    }
+
+    &__link {
+      font-size: 18px;
+    }
+  }
+}
