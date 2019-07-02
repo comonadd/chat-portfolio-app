@@ -6,8 +6,9 @@
  * @license MIT
  */
 
-@import "vars";
-@import "mixins";
+@import "+/vars.scss";
+@import "+/mixins.scss";
+@import "+/include-media.scss";
 
 /* The sidebar */
 .sidebar {

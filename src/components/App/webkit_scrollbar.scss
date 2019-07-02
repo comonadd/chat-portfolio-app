@@ -10,7 +10,7 @@
  * @license MIT
  */
 
-@import "vars";
+@import "+/vars.scss";
 
 :global ::-webkit-scrollbar {
   width: $scroll-bar___length;
@@ -36,15 +36,15 @@
   background: $scroll-bar__thumb___background;
 
   &:hover {
-    background: $scroll-bar__thumb_hover___background
+    background: $scroll-bar__thumb_hover___background;
   }
 
   &:focus {
-    background: $scroll-bar__thumb_focus___background
+    background: $scroll-bar__thumb_focus___background;
   }
 
   &:active {
-    background: $scroll-bar__thumb_active___background
+    background: $scroll-bar__thumb_active___background;
   }
 }
 

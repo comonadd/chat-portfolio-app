@@ -6,7 +6,7 @@
  * @license MIT
  */
 
-@import "mixins";
+@import "+/mixins.scss";
 
 .unknown-scene {
   @include scene;

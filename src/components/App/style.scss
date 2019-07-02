@@ -1,7 +1,7 @@
-@import "+/vars";
-@import "global_styles";
-@import "webkit_scrollbar";
-@import "~include-media/dist/_include-media.scss";
+@import "+/vars.scss";
+@import "./global_styles";
+@import "./webkit_scrollbar";
+@import "+/include-media.scss";
 
 .app {
   display: flex;

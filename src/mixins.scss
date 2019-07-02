@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-@import "~include-media/dist/_include-media.scss";
+ @import "+/include-media.scss";
 
 @mixin scene {
   display: flex;
