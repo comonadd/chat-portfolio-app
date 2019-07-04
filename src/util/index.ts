@@ -1,25 +1,32 @@
-/**
- * @file index.ts
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- */
+import color from "color";
 
-const Color = require('color');
-
+// eslint-disable-next-line no-useless-escape
 export const EMAIL_REGEX = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 
 const randomChoice = (arr: any[]) => arr[Math.random() % arr.length];
 
-const generate_random_username = () => {
+const generateRandomUsername = () => {
   const possibleParts = [
-    'sand', 'queen', 'robot', 'black',
-    'spider', 'user', 'green', 'folk',
-    'grasp', 'zombie', 'feather', 'cat',
-    'dog', 'chicken', 'trusty',
+    "sand",
+    "queen",
+    "robot",
+    "black",
+    "spider",
+    "user",
+    "green",
+    "folk",
+    "grasp",
+    "zombie",
+    "feather",
+    "cat",
+    "dog",
+    "chicken",
+    "trusty"
   ];
 
   const partsAmount = (Math.random() % 3) + 1;
 
-  let result = '';
+  let result = "";
 
   for (let i = 0; i < partsAmount; i++) {
     result += randomChoice(possibleParts);
@@ -28,13 +35,11 @@ const generate_random_username = () => {
   return result;
 };
 
-const generate_random_firstname = () => randomChoice([
-  "John", "Sarah", "Roberto",
-]);
+const generateRandomFirstname = () =>
+  randomChoice(["John", "Sarah", "Roberto"]);
 
-const generate_random_lastname = () => randomChoice([
-  "Archer", "Crocker", "Programmer",
-]);
+const generateRandomLastname = () =>
+  randomChoice(["Archer", "Crocker", "Programmer"]);
 
 /**
  * @summary
@@ -50,11 +55,13 @@ export const isUpper = (ch: string) => ch.toUpperCase() == ch;
 
 export const getUserAvatarBackgroundColor = (username: string) => {
   const hash = (str: string) => {
-    let hash = 0, i, chr;
+    let hash = 0,
+      i,
+      chr;
     if (str.length === 0) return hash;
     for (i = 0; i < str.length; i++) {
-      chr   = str.charCodeAt(i);
-      hash  = ((hash << 5) - hash) + chr;
+      chr = str.charCodeAt(i);
+      hash = (hash << 5) - hash + chr;
       // Convert to 32bit integer
       hash |= 0;
     }
