@@ -1,14 +1,4 @@
-/**
- * The style brief description.
- *
- * The style long description.
- *
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- * @copyright 2017
- * @license MIT
- */
-
- @import "+/include-media.scss";
+@import "+/include-media.scss";
 
 @mixin scene {
   display: flex;
@@ -29,5 +19,139 @@
 @mixin display-flex-on-tablets-or-less {
   @include media("<=tablet") {
     display: flex;
+  }
+}
+
+@mixin display-flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+@mixin display-flex-row {
+  display: flex;
+  flex-direction: row;
+}
+
+@mixin display-flex-row-reverse {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+@mixin flex-full-content-center {
+  justify-content: center;
+  align-items: center;
+}
+
+@mixin fixed-position($top, $left, $right, $bottom) {
+  position: fixed;
+  top: $top;
+  left: $left;
+  right: $right;
+  bottom: $bottom;
+}
+
+@mixin flex($flex-basis, $flex-shrink, $flex-grow) {
+  flex: $flex-basis $flex-shrink $flex-grow;
+}
+
+@mixin padding($top, $right, $bottom, $left) {
+  padding-top: $top;
+  padding-right: $right;
+  padding-bottom: $bottom;
+  padding-left: $left;
+}
+
+@mixin margin($top, $right, $bottom, $left) {
+  margin-top: $top;
+  margin-right: $right;
+  margin-bottom: $bottom;
+  margin-left: $left;
+}
+
+@mixin box($box-side-length) {
+  width: $box-side-length;
+  height: $box-side-length;
+}
+
+@function pow($number, $exponent) {
+  $value: 1;
+
+  @if $exponent > 0 {
+    @for $i from 1 through $exponent {
+      $value: $value * $number;
+    }
+  }
+
+  @return $value;
+}
+
+@mixin z-index-level($lvl) {
+  z-index: pow(10, $lvl);
+}
+
+@mixin sidebar-item {
+  @include display-flex-row;
+  @include flex-full-content-center;
+  @include flex(var(--sidebar-width), 0, 0);
+
+  color: var(--sidebar-color);
+  background-color: var(--sidebar-bg);
+  font-size: var(--sidebar-font-size);
+  text-align: center;
+  transition: all 200ms cubic-bezier(0.075, 0.82, 0.165, 1);
+
+  &:hover,
+  &:focus {
+    background: var(--sidebar-bg-hover);
+    color: var(--sidebar-color-hover);
+    cursor: pointer;
+  }
+
+  &:active {
+    background: var(--sidebar-bg-active);
+    color: var(--sidebar-color-active);
+    cursor: default;
+  }
+
+  a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: inherit !important;
+    flex: 1 1 100%;
+    height: 100%;
+  }
+
+  &__content {
+    flex: 1 0 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+      max-width: 100%;
+      min-width: 100%;
+    }
+
+    .fa,
+    .octicon {
+      color: inherit !important;
+      font-size: 32px !important;
+    }
+
+    &__icon {
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex: 0 0 80px;
+    }
+
+    &__text {
+      @include display-flex-on-tablets-or-less;
+
+      display: none;
+      flex: 1 0 100px;
+    }
   }
 }
