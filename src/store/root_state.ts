@@ -1,13 +1,15 @@
-/**
- * @file root_state.ts
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- */
+import { NotificationsState } from "./reducers/notifications";
+import { AuthenticationState } from "./reducers/authentication";
+import { UsersState } from "./reducers/users";
+import { MessagesState } from "./reducers/messages";
+import { ModalsState } from "./reducers/modals";
 
-import { State as NotificationsState } from './ducks/notifications';
-
-export type RootState = {
-  notifications: NotificationsState,
-  firebase: any,
-};
+export interface RootState {
+  notifications: NotificationsState;
+  auth: AuthenticationState;
+  users: UsersState;
+  messages: MessagesState;
+  modals: ModalsState;
+}
 
 export default RootState;

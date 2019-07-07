@@ -1,12 +1,19 @@
-/**
- * @file types.ts
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- */
+export interface Action {
+  type: string;
+  payload?: Record<string, any>;
+}
 
-import { Dispatch as ReduxDispatch } from 'redux';
+export interface User {
+  id: string;
+  email: string;
+  password: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+}
 
-import RootState from './root_state';
-
-export { RootState } from './root_state';
-
-export type Dispatch = ReduxDispatch<RootState>;
+export interface Message {
+  text: string;
+  date: Date;
+  authorID: string;
+}
