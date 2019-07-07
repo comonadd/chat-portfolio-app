@@ -8,7 +8,7 @@
  * @license MIT
  */
 
-@import "+/vars.scss";
+
 
 .loader {
   $delay: 111ms;
@@ -60,7 +60,7 @@
 
       @for $i from 1 through 5 {
         &:nth-child(#{$i}) {
-          background: if($i % 2 == 0, $colors__grain, $colors__oxblood);
+          background: if($i % 2 == 0, var(--theme-colors-grain), var(--theme-colors-oxblood));
           animation-delay: $delay * $i;
         }
       }
