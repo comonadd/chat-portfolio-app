@@ -76,11 +76,18 @@ export const getUserAvatarBackgroundColor = (username: string) => {
     res = res >= 190 ? 190 : res;
     return res;
   });
-  return Color.rgb(a[0], a[1], a[2]).string();
+  return color.rgb(a[0], a[1], a[2]).string();
+};
+
+export const getCurrentTime = () => new Date().getTime();
+
+export const scrollDownElement = (elem: any) => {
+  elem.scrollTop = elem.scrollHeight;
 };
 
 export default {
   EMAIL_REGEX,
   isUpper,
-  getUserAvatarBackgroundColor,
+  scrollDownElement,
+  getUserAvatarBackgroundColor
 };
