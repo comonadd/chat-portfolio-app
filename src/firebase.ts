@@ -30,6 +30,7 @@ export const firebaseLogout = () => {
 };
 
 export interface FirebaseCreateUserInfo {
+  username: string;
   email: string;
   password: string;
   firstName: string;
