@@ -1,0 +1,180 @@
+:root {
+  // Theme settings
+  --theme-colors-dark-green: #1e8449;
+  --theme-main-color: var(--theme-colors-dark-green);
+  --theme-first-font: "Lato";
+  --theme-colors-white-font: #fff;
+  --theme-colors-dark-grey: rgb(122, 122, 122);
+
+  // Heading settings ("h[1-6]" tags)
+  --heading-font: var(--theme-first-font);
+  --heading-color: #333;
+
+  // Paragraph settings ("p" tags)
+  --paragraph-line-height: 28px;
+  --paragraph-margin: 0 0 25px 0;
+
+  // Link settings ("a" tags)
+  --link-color: var(--theme-colors-oxblood);
+  --link-text-decoration: none;
+  --link-color-hover: darken(var(--link-color), 10%);
+  --link-color-focus: darken(var(--link-color), 15%);
+
+  // Body settings
+  --body-bg: #fff;
+  --body-color: #555;
+
+  // Scrollbar
+  --scrollbar-length: 6px;
+  --scrollbar-bg: #eee;
+  --scrollbar-thumb-length: 4px;
+  --scrollbar-thumb-bg: #1c1c1c;
+  --scrollbar-thumb-bg-hover: lighten(var(--scrollbar-thumb-bg), 5%);
+  --scrollbar-thumb-bg-focus: lighten(var(--scrollbar-thumb-bg), 10%);
+  --scrollbar-thumb-bg-active: lighten(var(--scrollbar-thumb-bg), 15%);
+
+  // Sidebar settings
+  --sidebar-width: 80px;
+  --sidebar-bg: #fff;
+  --sidebar-bg-hover: var(--sidebar-bg);
+  --sidebar-bg-active: var(--sidebar-bg);
+  --sidebar-color: #000;
+  --sidebar-color-hover: rgb(90, 90, 90);
+  --sidebar-color-active: var(--theme-colors-dark-green);
+  --sidebar-font-size: 1rem;
+  --sidebar-width: 80px;
+  --sidebar-border-right: 1px solid #eee;
+  --sidebar-mobile-height: 80px;
+  --sidebar-nav-mobile-items-bg: #fff;
+  --sidebar-mobile-btn-bg-hover: var(--sidebar-bg);
+  --sidebar-mobile-btn-color-hover: var(--sidebar-color-hover);
+
+  // Logo
+  --logo-color: var(--theme-colors-blackboard);
+  --logo-font-size: 24px;
+
+  // Modals
+  --modal-overlay-bg: rgba(0, 0, 0, 0.855);
+  --modal-padding: 32px 24px;
+  --modal-border: 1px solid #eee;
+  --modal-bg: #fff;
+}
+
+* {
+  font-family: var(--theme-first-font);
+}
+
+/* The outer HTML elements */
+html,
+body {
+  height: 100%;
+}
+
+/* The body element */
+body {
+  margin: 0;
+  background-color: var(--body-bg-color);
+  color: var(--body-color);
+}
+
+/* The heading */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--heading-font);
+  font-weight: (--heading-font-weight);
+  color: var(--heading-color);
+}
+
+/* The paragraph */
+p {
+  line-height: var(--paragraph-line-height);
+  margin: var(--paragraph-margin);
+}
+
+/* Link */
+a {
+  color: var(--link-color);
+  text-decoration: var(--link-text-decoration);
+
+  &:hover {
+    color: var(--link-color-hover);
+  }
+
+  &:focus {
+    color: var(--link-color-focus);
+  }
+}
+
+/* The input elemnent */
+input,
+textarea {
+  // $border___clr: #eee;
+  // $clr: var(--body-color);
+
+  // border: 1px solid $border___clr;
+  // color: $clr;
+  // padding: 8px 6px;
+  // font-size: 14px;
+
+  // &:hover {
+  //   border: 1px solid darken($border___clr, 5%);
+  //   color: lighten(var(--body-color), 5%);
+  // }
+
+  // &:focus {
+  //   border: 1px solid darken($border___clr, 10%);
+  //   color: lighten(var(--body-color), 10%);
+  // }
+
+  // &:active {
+  //   border: 1px solid darken($border___clr, 15%);
+  //   color: lighten(var(--body-color), 15%);
+  // }
+}
+
+/* The button element */
+button {
+  // $bg: var(--theme-colors-tan);
+  // $clr: #fff;
+
+  // background: $bg;
+  // color: $clr;
+  // border: none;
+  // padding: 16px 0;
+
+  // &:hover {
+  //   background: darken($bg, 5%);
+  //   color: darken($clr, 5%);
+  //   cursor: pointer;
+  // }
+
+  // &:focus {
+  //   background: darken($bg, 10%);
+  //   color: darken($clr, 10%);
+  //   cursor: pointer;
+  // }
+
+  // &:active {
+  //   background: darken($bg, 15%);
+  //   color: darken($clr, 15%);
+  // }
+}
+
+/* The form element */
+form {
+  display: flex;
+  flex-direction: column;
+
+  input {
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  button:last-child {
+    margin-top: 32px;
+  }
+}
