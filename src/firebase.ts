@@ -81,4 +81,21 @@ export const firebaseAddMessage = ({ authorID, text }: Partial<Message>) => {
   });
 };
 
+export const firebaseFetchAllUsers = () => {
+  return new Promise((resolve: any, reject: any) => {
+    firebase
+      .database()
+      .ref("users")
+      .on(
+        "value",
+        (snapshot: any) => {
+          resolve(snapshot.val());
+        },
+        (err: Error) => {
+          reject(err);
+        }
+      );
+  });
+};
+
 export default firebase;
