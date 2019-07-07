@@ -1,0 +1,10 @@
+@import "+/mixins.scss";
+
+.sidebar-logotype {
+  flex-grow: 0;
+  flex-shrink: 0;
+  display: flex;
+  height: var(--sidebar-width);
+  justify-content: center;
+  align-items: center;
+}
