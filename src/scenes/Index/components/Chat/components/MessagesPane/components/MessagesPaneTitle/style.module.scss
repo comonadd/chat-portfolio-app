@@ -1,0 +1,10 @@
+@import "+/mixins.scss";
+
+.messages-pane-title {
+  padding: 0 24px;
+  border-bottom: var(--default-border);
+  background: var(--body-bg);
+  h1 {
+    color: var(--body-color);
+  }
+}

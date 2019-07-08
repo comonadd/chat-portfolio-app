@@ -1,0 +1,54 @@
+@import "+/mixins.scss";
+
+.new-msg-bar {
+  width: 100%;
+  flex: 1 0 auto;
+  display: flex;
+  padding: 16px;
+  box-sizing: border-box;
+  border-top: var(--default-border);
+  background-color: var(--body-bg);
+  color: var(--body-color);
+  position: relative;
+  padding: 8px 16px;
+
+  @include media("<=tablet") {
+    flex-direction: column-reverse;
+  }
+
+  &__send-btn {
+    flex-grow: 0;
+    flex-shrink: 0;
+    background: transparent !important;
+    color: var(--body-color);
+    padding: 16px;
+    outline: none !important;
+    box-shadow: none;
+    border: none;
+    cursor: pointer;
+
+    @include media("<=tablet") {
+      flex-basis: 48px;
+      margin-right: 0;
+      margin-top: 16px;
+    }
+
+    &:hover,
+    &:focus {
+      color: var(--theme-colors-yellow);
+    }
+
+    &:active {
+      cursor: default;
+    }
+  }
+
+  &__field {
+    @include flex(100%, 1, 1);
+    @include input-field-basic(inherit, inherit);
+    @include input-field-borderless;
+    @include media("<=tablet") {
+      flex-basis: 64px;
+    }
+  }
+}

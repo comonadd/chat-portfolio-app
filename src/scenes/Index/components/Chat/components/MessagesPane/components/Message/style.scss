@@ -1,16 +1,10 @@
-/**
- * The style brief description.
- *
- * The style long description.
- *
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- * @copyright 2017
- * @license MIT
- */
+
+@import '+/mixins.scss';
 
 .msg {
   $msg___padding: 20px;
 
+  width: 100%;
   border-bottom: 1px solid #eee;
   padding: $msg___padding;
   display: flex;

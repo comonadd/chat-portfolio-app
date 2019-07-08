@@ -1,179 +1,107 @@
-/**
- * @file index.tsx
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- */
-
-import React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect as reactReduxConnect } from 'react-redux';
+import { firebaseAddMessage } from "+/firebase";
+import { addNotification, fetchMoreMessages } from "+/store/action";
+import { RootState } from "+/store/root_state";
 import {
-  firebaseConnect,
-  isLoaded,
-  isEmpty,
-  dataToJS,
-  pathToJS,
-  customToJS,
-} from 'react-redux-firebase'
-
-import constants from 'src/util/constants';
-import { addNotification } from 'store/ducks/notifications';
-import { RootState, Dispatch } from 'store/types';
-import Loader from 'components/Loader';
-import MessagesPane, { MessageProps } from './components/MessagesPane';
-import NewMessageBar from './components/NewMessageBar';
-const style = require('./style');
-
-type State = {
-  messages: any,
-  messagesLoaded: number,
-  messagesLoading: boolean,
-  loadingMessagesFirstTime: boolean,
-  loadedAllMessages: boolean,
-};
-
-interface OwnProps {}
+  getCurrentUser,
+  getMessagesSortedByDate,
+  getUsersById,
+  isAuthenticated,
+  isFinishedLoadingMessages,
+  isLoadingUsers,
+  isMessagesLoading
+} from "+/store/selectors";
+import { Message, User } from "+/store/types";
+import React from "react";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import MessagesPane from "./components/MessagesPane";
+import NewMessageBar from "./components/NewMessageBar";
+import "./style.scss";
 
 interface ConnectedProps {
-  firebase: any;
-  users: any;
+  messages: Message[];
+  usersById: Record<string, User>;
+  currentUser: User;
   auth: any;
-  authError: any;
-  profile: any;
+  messagesLoading: boolean;
+  messagesLoadedAll: boolean;
   addNotification: typeof addNotification;
+  fetchMoreMessages: any;
+  loadingUsers: boolean;
+  authenticated: boolean;
 }
 
-/**
- * @summary
- * The component that represents the chat.
- */
-class Chat extends React.Component<OwnProps & ConnectedProps, State> {
-  /**
-   * @summary The initial state.
-   */
-  state: State = {
-    messages: {},
-    messagesLoaded: 0,
-    messagesLoading: false,
-    loadingMessagesFirstTime: true,
-    loadedAllMessages: false,
-  };
-
-  constructor(...args: any[]) {
-    super(...args);
-
-    this.onSend = this.onSend.bind(this);
-    this.fetchMoreMessages = this.fetchMoreMessages.bind(this);
-  }
-
-  onSend(text: string): void {
-    if (!isEmpty(this.props.auth)) {
-      const msg = {
+class Chat extends React.Component<{} & ConnectedProps, {}> {
+  private onSend = (text: string): void => {
+    const { authenticated, currentUser } = this.props;
+    if (authenticated) {
+      firebaseAddMessage({
         text: text,
-        date: Date.now(),
-        authorID: this.props.auth.uid,
-      };
-      const msgKey = this.props.firebase.push('messages', msg);
-
-      this.setState({
-        ...this.state,
-        messages: {
-          ...this.state.messages,
-          msgKey: msg,
-        },
+        authorID: currentUser.id
+      }).catch((error: Error) => {
+        this.props.addNotification("error", "Failed to send message");
       });
     } else {
       this.props.addNotification(
-        'error',
-        'You must be authenticated in order to send messages',
+        "error",
+        "You have be authenticated in order to send messages"
       );
     }
+  };
+
+  public componentWillMount() {
+    this.props.fetchMoreMessages();
   }
 
-  fetchMoreMessages() {
-    // If we've already loaded all the messages, return
-    if (this.state.loadedAllMessages || this.state.messagesLoading) return;
-
-    // Set the "loading" state
-    this.setState({
-      ...this.state,
-      messagesLoading: true,
-    });
-
-    // Calculate the amount of messages to load
-    const amountOfMsgsToLoad = this.state.messagesLoaded + constants.AMOUNT_OF_MESSAGES_TO_LOAD;
-
-    this.props.firebase
-        .ref()
-        .child('messages')
-        .orderByKey()
-        .limitToLast(amountOfMsgsToLoad)
-        .once('value', (snapshot) => {
-          const val = snapshot.val();
-
-          this.setState({
-            ...this.state,
-            messagesLoading: false,
-            loadingMessagesFirstTime: false,
-          });
-
-          if (val) {
-            const loadedActually = Object.keys(val).length;
-
-            // If the amount of messages haven't changed from the
-            // last load
-            if (loadedActually == this.state.messagesLoaded) {
-              // We're done
-              this.setState({
-                ...this.state,
-                loadedAllMessages: true,
-              });
-              return;
-            }
-
-            this.setState({
-              ...this.state,
-              messages: val,
-              messagesLoaded: loadedActually,
-            });
-          }
-        });
-  }
-
-  componentWillMount() {
-    // Fetch the first part of messages
-    this.fetchMoreMessages();
-  }
-
-  render() {
-    const messages = this.state.messages || {};
-    const users = this.props.users || {};
+  public render() {
+    const {
+      messages,
+      usersById,
+      messagesLoading,
+      addNotification,
+      authenticated,
+      loadingUsers
+    } = this.props;
 
     return (
-      <div className={style.chat}>
+      <div className={"chat"}>
         <MessagesPane
-          items={messages}
-          isEmpty={isEmpty(messages) || isEmpty(users)}
-          users={users}
-          loadingFirstTime={this.state.loadingMessagesFirstTime}
-          loading={this.state.messagesLoading || !isLoaded(this.props.users)}
-          onScrollToTheTop={this.fetchMoreMessages}
+          messages={messages}
+          usersById={usersById}
+          onScrollToTheTop={this.props.fetchMoreMessages}
+          loading={messagesLoading}
+          loadingUsers={loadingUsers}
         />
-        <NewMessageBar onSend={this.onSend} />
+        <NewMessageBar
+          authenticated={authenticated}
+          onSend={this.onSend}
+          addNotification={addNotification}
+        />
       </div>
     );
   }
 }
 
-export default firebaseConnect([
-  'users',
-])(reactReduxConnect(
-  (state: RootState, ownProps: OwnProps) => ({
-    auth: pathToJS(state.firebase, 'auth'),
-    authError: pathToJS(state.firebase, 'authError'),
-    profile: pathToJS(state.firebase, 'profile'),
-    users: dataToJS(state.firebase, 'users'),
-  }),
-  (dispatch: Dispatch) => bindActionCreators({
-    addNotification,
-  }, dispatch)
-)(Chat));
+const mapStateToProps = (state: RootState, ownProps: any) => ({
+  usersById: getUsersById(state),
+  messages: getMessagesSortedByDate(state),
+  messagesLoading: isMessagesLoading(state),
+  messagesLoadedAll: isFinishedLoadingMessages(state),
+  authenticated: isAuthenticated(state),
+  loadingUsers: isLoadingUsers(state),
+  currentUser: getCurrentUser(state)
+});
+
+const mapDispatchToProps = (dispatch: any) =>
+  bindActionCreators(
+    {
+      addNotification,
+      fetchMoreMessages
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Chat);

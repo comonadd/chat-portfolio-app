@@ -1,35 +1,32 @@
 import React from "react";
 import { Switch, Route } from "react-router";
 import NotificationSystem from "react-notification-system";
-import PropTypes from "prop-types";
-import { connect as reactReduxConnect } from "react-redux";
+import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import RootState from "store/root_state";
-import {
-  State as NotificationsState,
-  removeNotification
-} from "store/ducks/notifications";
-import Sidebar from "components/Sidebar";
-import IndexScene from "scenes/Index";
-import UnknownScene from "scenes/Unknown";
-import style from "./style.scss";
+import { removeNotification, fetchAllUsers } from "+/store/action";
+import RootState from "+/store/root_state";
+import Sidebar from "+/components/Sidebar";
+import IndexScene from "+/scenes/Index";
+import UnknownScene from "+/scenes/Unknown";
+import ModalSystem from '+/components/ModalSystem';
+
+import "./style.scss";
 
 interface AppProps {
-  notifications: NotificationsState;
+  notifications: any;
   removeNotification: typeof removeNotification;
+  fetchAllUsers: any;
 }
 
-type AppState = {};
+class App extends React.Component<AppProps, {}> {
+  private notificationSystemRef = React.createRef();
 
-class App extends React.Component<AppProps, AppState> {
-  state: AppState = {} as AppState;
-
-  notificationSystem: NotificationSystem.System;
-
-  componentWillReceiveProps(props: any) {
-    /* Display all the notifications */
+  public componentWillReceiveProps(props: any) {
+    // Display all the notifications
     props.notifications.items.map((notification: any, index: number) => {
-      this.notificationSystem.addNotification({
+      const notifSystem = this.notificationSystemRef
+        .current as NotificationSystem.System;
+      notifSystem.addNotification({
         level: notification.level,
         message: notification.text
       });
@@ -37,33 +34,41 @@ class App extends React.Component<AppProps, AppState> {
     });
   }
 
-  render() {
+  public componentDidMount() {
+    this.props.fetchAllUsers();
+  }
+
+  public render() {
     return (
-      <div className={style.app}>
+      <div className="app">
         <Sidebar />
-        <div className={style.app__main}>
+        <div className="app__main">
           <Switch>
             <Route exact path="/" component={IndexScene} />
             <Route path="*" component={UnknownScene} />
           </Switch>
         </div>
-        <NotificationSystem
-          ref={(ref: any) => (this.notificationSystem = ref)}
-        />
+        <NotificationSystem ref={this.notificationSystemRef as any} />
+        <ModalSystem />
       </div>
     );
   }
 }
 
-export default reactReduxConnect(
-  (state: RootState) => ({
-    notifications: state.notifications
-  }),
-  (dispatch: any) =>
-    bindActionCreators(
-      {
-        removeNotification
-      },
-      dispatch
-    )
+const mapStateToProps = (state: RootState) => ({
+  notifications: state.notifications
+});
+
+const mapDispatchToProps = (dispatch: any) =>
+  bindActionCreators(
+    {
+      removeNotification,
+      fetchAllUsers
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
 )(App);

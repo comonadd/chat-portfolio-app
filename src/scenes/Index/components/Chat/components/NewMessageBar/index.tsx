@@ -1,93 +1,54 @@
-/**
- * @file index.tsx
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- */
-
-import React from 'react';
-import { bindActionCreators } from 'redux';
-import { connect as reactReduxConnect } from 'react-redux';
-import {
-  firebaseConnect,
-  isLoaded,
-  isEmpty,
-  dataToJS,
-  pathToJS,
-} from 'react-redux-firebase'
-
-import { Dispatch, RootState } from 'store/types';
-import { addNotification } from 'store/ducks/notifications';
-const style = require('./style');
+import classnames from "classnames";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import React from "react";
+import style from "./style.module.scss";
 
 export interface OwnProps {
   onSend: (text: string) => void;
-};
-
-interface ConnectedProps {
-  auth: any;
-  authError: any;
-  profile: any;
-  addNotification: typeof addNotification;
-  firebase: any;
 }
 
-type State = {
+interface ConnectedProps {
+  authenticated: boolean;
+  addNotification: any;
+}
+
+interface State {
   newMsg: {
     text: string;
-  },
+  };
 }
 
 class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
-  /**
-   * @summary The initial state.
-   */
-  state: State = {
+  public state: State = {
     newMsg: {
-      text: '',
-    },
+      text: ""
+    }
   };
 
-  constructor(...args: any[]) {
-    // Call the parent class constructor
-    super(...args);
+  private showErrorMessage = (msg: string): void => {
+    this.props.addNotification("error", msg);
+  };
 
-    // Bind member methods
-    this.showErrorMessage = this.showErrorMessage.bind(this);
-    this.checkText = this.checkText.bind(this);
-    this.onSend = this.onSend.bind(this);
-    this.onTextChange = this.onTextChange.bind(this);
-    this.resetNewMsg = this.resetNewMsg.bind(this);
-  }
-
-  showErrorMessage(msg: string): void {
-    this.props.addNotification('error', msg);
-  }
-
-  checkText(): boolean {
+  private onSend = (event?: React.MouseEvent<HTMLButtonElement>) => {
     if (this.state.newMsg.text.length == 0) {
-      this.showErrorMessage('The message is empty');
+      // If the input field is empty, ignore the send button press
       return false;
     }
 
-    return true;
-  }
+    this.props.onSend(this.state.newMsg.text);
+    this.resetNewMsg();
+  };
 
-  onSend(event: React.MouseEvent<HTMLButtonElement>) {
-    if (this.checkText()) {
-      this.props.onSend(this.state.newMsg.text);
-      this.resetNewMsg();
-    }
-  }
-
-  resetNewMsg() {
+  private resetNewMsg() {
     this.setState({
       ...this.state,
       newMsg: {
-        text: '',
-      },
+        text: ""
+      }
     });
-  };
+  }
 
-  onTextChange(event: React.ChangeEvent<HTMLTextAreaElement>): void {
+  private onTextChange = (event: any): void => {
     const name = event.target.name;
     const value = event.target.value;
 
@@ -95,38 +56,34 @@ class NewMessageBar extends React.Component<OwnProps & ConnectedProps, State> {
       ...this.state,
       newMsg: {
         ...this.state.newMsg,
-        text: value,
-      },
+        text: value
+      }
     });
-  }
+  };
 
-  render(): JSX.Element {
+  public render() {
     return (
-      <div className={style.newMessageBar}>
-        <button
-          className={style.newMessageBar__sendBtn}
-          onClick={this.onSend}
-        >
-          Send
-        </button>
-        <textarea
-          className={style.newMessageBar__field}
+      <div className={style["new-msg-bar"]}>
+        <input
+          className={classnames({
+            [style["new-msg-bar__field"]]: true,
+            "placeholder-hidden": this.state.newMsg.text.length > 0
+          })}
           name="text"
           value={this.state.newMsg.text}
           onChange={this.onTextChange}
-          placeholder="Type your message here"
-          onKeyPress={(e: any) => (e.key == 'Enter') ? this.onSend(undefined) : undefined}
+          placeholder="Write a message..."
+          onKeyPress={(e: any) => e.key === "Enter" && this.onSend(undefined)}
         />
+        <button
+          className={style["new-msg-bar__send-btn"]}
+          onClick={this.onSend}
+        >
+          <FontAwesomeIcon icon={["fas", "paper-plane"]} />
+        </button>
       </div>
     );
   }
 }
 
-export default firebaseConnect([
-])(reactReduxConnect(
-  (state: RootState, ownProps: OwnProps) => ({
-  }),
-  (dispatch: Dispatch) => bindActionCreators({
-    addNotification,
-  }, dispatch)
-)(NewMessageBar));
+export default NewMessageBar;
