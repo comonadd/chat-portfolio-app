@@ -1,0 +1,44 @@
+@import "+/mixins.scss";
+
+$user-avatar__default-size: 48px;
+$user-avatar__small-size: 32px;
+$user-avatar__big-size: 64px;
+
+.user-avatar {
+  @include display-flex-row;
+
+  align-items: center;
+  width: $user-avatar__default-size;
+  height: $user-avatar__default-size;
+  justify-content: center;
+  font-family: "Open Sans";
+  border-radius: 100%;
+  padding: 8px;
+
+  &_small {
+    width: $user-avatar__small-size;
+    height: $user-avatar__small-size;
+  }
+
+  &_big {
+    width: $user-avatar__big-size;
+    height: $user-avatar__big-size;
+  }
+
+  &__name-initials {
+    $spacing: -2px;
+
+    font-size: 100%;
+    font-weight: bold;
+    letter-spacing: $spacing;
+  }
+
+  &__fullname {
+    font-size: 150%;
+  }
+}
+
+> img {
+  min-width: 100%;
+  max-width: 100%;
+}

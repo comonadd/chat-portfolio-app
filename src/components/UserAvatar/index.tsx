@@ -1,38 +1,33 @@
-/**
- * @file index.tsx
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- */
+import util from "+/util";
+import React from "react";
+import { MoonLoader } from "react-spinners";
+import style from "./style.module.scss";
 
-import React from 'react';
-
-import util from 'src/util';
-const style = require('./style');
-
-type UserAvatarProps = {
-  user: {
-    username: string,
-    firstname: string,
-    lastname: string,
-  },
+interface UserAvatarProps {
+  user: { firstName: string; lastName: string; username: string };
   displayFullName: boolean;
-};
+  loading: boolean;
+}
 
-export default (props: UserAvatarProps) => {
-  // Generate the user's avatar background color
-  const backgroundColor = util.getUserAvatarBackgroundColor(
-    props.user.username,
-  );
+export default ({ user, displayFullName, loading }: UserAvatarProps) => {
+  const backgroundColor = util.getUserAvatarBackgroundColor(user.username);
 
   return (
-    <div className={style.userAvatar}
-         style={{background: backgroundColor, color: '#fff', }}>
-      {props.displayFullName ?
-       <span className={style.userAvatar__fullname}>
-         {`${props.user.firstname} ${props.user.lastname}`}
-       </span> :
-       <span className={style.userAvatar__nameInitials}>
-         {`${props.user.firstname[0]} ${props.user.lastname[0]}`}
-       </span>}
+    <div
+      className={style["user-avatar"]}
+      style={{ background: backgroundColor, color: "#fff" }}
+    >
+      {loading ? (
+        <MoonLoader color={"#fff"} size={15} />
+      ) : displayFullName ? (
+        <span className={style["user-avatar__fullname"]}>
+          {`${user.firstName} ${user.lastName}`}
+        </span>
+      ) : (
+        <span className={style["user-avatar__name-initials"]}>
+          {`${user.firstName[0]} ${user.lastName[0]}`}
+        </span>
+      )}
     </div>
   );
-}
+};
