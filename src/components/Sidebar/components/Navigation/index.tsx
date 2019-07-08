@@ -1,282 +1,193 @@
-/**
- * @file index.tsx
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- */
-
-import React from 'react';
-import classnames from 'classnames';
 import {
-  bindActionCreators,
-} from 'redux';
-import {
-  connect as reactReduxConnect
-} from 'react-redux';
-import {
-  firebaseConnect,
-  isLoaded,
-  isEmpty,
-  dataToJS,
-  pathToJS,
-} from 'react-redux-firebase'
-import { push as reactRouterReduxPush } from 'react-router-redux';
-
-import { addNotification } from 'store/ducks/notifications';
-import { Dispatch, RootState } from 'store/types';
-import NavigationItem from './components/Item';
-import LoginPopup from './components/LoginPopup';
-import RegisterPopup from './components/RegisterPopup';
-import ProfilePopup from './components/ProfilePopup';
-const style = require('../../style');
+  addNotification,
+  createFirebaseUser,
+  hideModal,
+  logout,
+  showModal,
+  signIn
+} from "+/store/action";
+import { RootState } from "+/store/root_state";
+import { getCurrentUser, isAuthenticated } from "+/store/selectors";
+import { User } from "+/store/types";
+import { PROJ_GITHUB_LINK } from "+/util/constants";
+import classnames from "classnames";
+import React from "react";
+import { connect } from "react-redux";
+import { push as reactRouterReduxPush } from "react-router-redux";
+import { bindActionCreators } from "redux";
+import NavigationItem from "./components/Item";
+import style from "./style.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export interface OwnProps {
   active: boolean;
 }
 
 interface ConnectedProps {
-  firebase: any;
-  auth: any;
-  authError: any;
-  profile: any;
-  addNotification: typeof addNotification,
-  reactRouterReduxPush: typeof reactRouterReduxPush,
+  currentUser?: User;
+  authenticated: boolean;
+  addNotification: typeof addNotification;
+  reactRouterReduxPush: typeof reactRouterReduxPush;
+  showModal: typeof showModal;
+  hideModal: typeof hideModal;
+  signIn: any;
+  createFirebaseUser: any;
+  logout: any;
 }
 
-/**
- * @summary
- * The navigation component state inteface.
- */
 interface State {
-  popups: {
-    login: boolean,
-    register: boolean,
-    profile: boolean,
-  };
-  active: boolean;
+  mobileMenuShown: boolean;
 }
 
-/**
- * @summary
- * The navigation component.
- */
 class Navigation extends React.Component<OwnProps & ConnectedProps, State> {
-  static projectGithubLink: string = 'https://github.com/wrongway4you/chat-portfolio-app';
-
-  /**
-   * @summary The initial state.
-   */
-  state: State = {
-    popups: {
-      register: false,
-      login: false,
-      profile: false,
-    },
-    active: false,
+  public state: State = {
+    mobileMenuShown: false
   };
 
-  constructor(...args: any[]) {
-    // Call the parent class constructor
-    super(...args);
+  private onLoginModalFormSubmit = (email: string, password: string) => {
+    this.props.hideModal("login");
+    this.props
+      .signIn(email, password)
+      .then(() => {
+        this.props.addNotification("success", "Successfull log-in");
+      })
+      .catch((err: Error) => {
+        this.props.addNotification("error", err.message);
+      });
+  };
 
-    // Bind member methods
-    this.showPopup = this.showPopup.bind(this);
-    this.hidePopup = this.hidePopup.bind(this);
-    this.onLoginPopupFormSubmit = this.onLoginPopupFormSubmit.bind(this);
-    this.onRegisterPopupFormSubmit = this.onRegisterPopupFormSubmit.bind(this);
-    this.onLogout = this.onLogout.bind(this);
-    this.toggleMobileMenu = this.toggleMobileMenu.bind(this);
-    this.hideMobileMenu = this.hideMobileMenu.bind(this);
-  }
-
-  /**
-   * @summary
-   * Show the popup with a given name.
-   *
-   * @return {undefined}
-   */
-  showPopup(name: string) {
+  private toggleMobileMenu = () => {
     this.setState({
       ...this.state,
-      active: false,
-      popups: {
-        ...this.state.popups,
-        [name]: true,
-      },
+      mobileMenuShown: !this.state.mobileMenuShown
     });
-    return true;
-  }
+  };
 
-  /**
-   * @summary
-   * Hide the popup with a given name.
-   *
-   * @return {undefined}
-   */
-  hidePopup(name: string) {
+  private hideMobileMenu = () => {
     this.setState({
       ...this.state,
-      popups: {
-        ...this.state.popups,
-        [name]: false,
-      },
+      mobileMenuShown: false
     });
-  }
+  };
 
-  onLoginPopupFormSubmit(email: string, password: string) {
-    this.hidePopup('login');
-    this.props.firebase.login({
-      email,
-      password,
-    }).then(() => {
-      this.props.addNotification('success', 'Successfull log-in');
-    }).catch((err) => {
-      this.props.addNotification('error', err.message);
-    });
-  }
+  public render() {
+    const { authenticated, currentUser, showModal, hideModal } = this.props;
 
-  onRegisterPopupFormSubmit(
-    username: string, password: string,
-    email: string, firstname: string,
-    lastname: string) {
-    this.hidePopup('register');
-    this.props.firebase.createUser(
-      {email, password},
-      {username, email, firstname, lastname},
-    ).then(() => {
-      this.props.addNotification('success', 'Successfull registration');
-    }).catch((err) => {
-      this.props.addNotification('error', err.message);
-    });
-  }
+    interface NavigationMobileMenuButtonProps {
+      onClick: any;
+    }
 
-  onLogout() {
-    this.props.firebase.logout();
-    this.props.reactRouterReduxPush('/');
-  }
-
-  toggleMobileMenu() {
-    this.setState({
-      ...this.state,
-      active: !this.state.active,
-    });
-  }
-
-  hideMobileMenu() {
-    this.setState({
-      ...this.state,
-      active: false,
-    });
-  }
-
-  render() {
-    const isAuthorized = this.props.auth && !this.props.auth.isAnonymous;
+    const NavigationMobileMenuButton = ({
+      onClick
+    }: NavigationMobileMenuButtonProps) => (
+      <div className={style["navigation__mobile-menu-btn"]} onClick={onClick}>
+        <FontAwesomeIcon icon={["fas", "bars"]} />
+      </div>
+    );
 
     const items: any = [
       {
-        name: 'Source Code',
-        iconClass: 'octicon octicon-repo',
+        name: "Source Code",
+        faIconParams: ["fab", "github"],
         onClick: () => {
           this.hideMobileMenu();
-          window.location.href = Navigation.projectGithubLink;
-        },
+          window.location.href = PROJ_GITHUB_LINK;
+        }
       },
       {
-        name: 'Issues',
-        iconClass: 'octicon octicon-issue-opened',
+        name: "Issues",
+        faIconParams: ["fas", "exclamation-circle"],
         onClick: () => {
           this.hideMobileMenu();
-          window.location.href = `${Navigation.projectGithubLink}/issues`;
-        },
+          window.location.href = `${PROJ_GITHUB_LINK}/issues`;
+        }
       },
       {
-        name: 'Pull Requests',
+        name: "Pull Requests",
         rel: false,
-        url:`${Navigation.projectGithubLink}/pulls`,
-        iconClass: 'octicon octicon-git-pull-request',
+        url: `${PROJ_GITHUB_LINK}/pulls`,
+        faIconParams: ["fas", "space-shuttle"],
         onClick: () => {
           this.hideMobileMenu();
-          window.location.href = `${Navigation.projectGithubLink}/pulls`;
-        },
+          window.location.href = `${PROJ_GITHUB_LINK}/pulls`;
+        }
       },
-      ...(isAuthorized ? [
-        {
-          name: 'Profile',
-          iconClass: 'fa fa-user',
-          onClick: () => this.showPopup('profile'),
-        },
-        {
-          name: 'Logout',
-          iconClass: 'fa fa-sign-out',
-          onClick: () => {
-            this.hideMobileMenu();
-            this.onLogout();
-          },
-        },
-      ] : [
-        {
-          name: 'Sign In',
-          iconClass: 'fa fa-sign-in',
-          onClick: () => this.showPopup('login'),
-        },
-        {
-          name: 'Sign Up',
-          iconClass: 'fa fa-user-plus',
-          onClick: () => this.showPopup('register'),
-        },
-      ]),
+      ...(authenticated
+        ? [
+            {
+              name: "Profile",
+              faIconParams: ["fas", "user"],
+              onClick: () => showModal("profile")
+            },
+            {
+              name: "Logout",
+              faIconParams: ["fas", "sign-out-alt"],
+              onClick: () => {
+                this.hideMobileMenu();
+                this.props.logout();
+                this.props.reactRouterReduxPush("/");
+              }
+            }
+          ]
+        : [
+            {
+              name: "Sign In",
+              faIconParams: ["fas", "sign-in-alt"],
+              onClick: () => showModal("login")
+            },
+            {
+              name: "Sign Up",
+              faIconParams: ["fas", "user-plus"],
+              onClick: () => showModal("register")
+            }
+          ])
     ];
 
-    const renderedItems = items.map((item: any) =>
+    const renderedItems = items.map((item: any) => (
       <NavigationItem
         key={item.name}
         name={item.name}
-        iconClass={item.iconClass}
-        onClick={item.onClick} />);
-
-    const popup =
-      this.state.popups.login ?
-      <LoginPopup
-        onSubmit={this.onLoginPopupFormSubmit}
-        onRemoval={() => this.hidePopup('login')} />
-      :
-      this.state.popups.register ?
-      <RegisterPopup
-        onSubmit={this.onRegisterPopupFormSubmit}
-        onRemoval={() => this.hidePopup('register')} />
-      :
-      this.state.popups.profile ?
-      <ProfilePopup
-        onRemoval={() => this.hidePopup('profile')} />
-      : undefined;
+        faIconParams={item.faIconParams}
+        onClick={item.onClick}
+      />
+    ));
 
     return (
-      <div className={style.sidebar__nav}>
-        <div className={classnames({
-            [style.sidebar__nav__items]: true,
-            [style.sidebar__nav__items_active]: this.state.active,
-        })}>
+      <div className={style["navigation"]}>
+        <div
+          className={classnames({
+            [style["navigation__items"]]: true,
+            [style["navigation__items_active"]]: this.state.mobileMenuShown
+          })}
+        >
           {renderedItems}
         </div>
-        <div
-          className={classnames([style.sidebar__btn, style.sidebar__nav__mobileMenuBtn])}
-          onClick={this.toggleMobileMenu}>
-          <i className="fa fa-bars"></i>
-        </div>
-        <div className={style.sidebar__nav__popup}>
-          {popup}
-        </div>
+        <NavigationMobileMenuButton onClick={this.toggleMobileMenu} />
       </div>
     );
   }
 }
 
-export default firebaseConnect()(reactReduxConnect(
-  (state: RootState, ownProps: OwnProps) => ({
-    authError: pathToJS(state.firebase, 'authError'),
-    auth: pathToJS(state.firebase, 'auth'),
-    profile: pathToJS(state.firebase, 'profile'),
-  }),
-  (dispatch: Dispatch) => bindActionCreators({
-    addNotification,
-    reactRouterReduxPush,
-  }, dispatch)
-)(Navigation));
+const mapStateToProps = (state: RootState, ownProps: OwnProps) => ({
+  currentUser: getCurrentUser(state),
+  authenticated: isAuthenticated(state)
+});
+
+const mapDispatchToProps = (dispatch: any) =>
+  bindActionCreators(
+    {
+      addNotification,
+      reactRouterReduxPush,
+      createFirebaseUser,
+      signIn,
+      showModal,
+      hideModal,
+      logout
+    },
+    dispatch
+  );
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Navigation);

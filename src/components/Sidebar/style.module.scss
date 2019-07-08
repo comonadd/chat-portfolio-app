@@ -1,0 +1,29 @@
+@import "+/mixins.scss";
+@import "+/include-media.scss";
+
+.sidebar {
+  @include display-flex-column;
+
+  position: relative;
+  background: var(--sidebar-bg);
+  border-right: var(--sidebar-border-right);
+  flex-basis: var(--sidebar-width);
+  flex-shrink: 0;
+  flex-grow: 0;
+  box-sizing: border-box;
+  justify-content: space-between;
+  overflow: hidden;
+
+  /* The styles for the sidebar when the width of the view is a tablet width or less */
+  @include media("<=tablet") {
+    flex-direction: row;
+    border-right: none;
+    border-bottom: var(--sidebar-border-right);
+    overflow: visible;
+    height: var(--sidebar-mobile-height);
+  }
+}
+
+.sidebar-logotype {
+  @include sidebar-item;
+}

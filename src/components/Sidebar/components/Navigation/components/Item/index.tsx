@@ -1,42 +1,25 @@
-/**
- * @file index.tsx
- * @author Dmitry Guzeev <dmitry.guzeev@yahoo.com>
- */
+import React from "react";
+import classnames from "classnames";
+import style from "./style.module.scss";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
-import React from 'react';
-import classnames from 'classnames';
-
-const style = require('components/Sidebar/style');
-
-interface State {}
-
-interface Props {
+export interface NavigationItemProps {
   name: string;
-  iconClass: string;
+  faIconParams: IconProp;
   onClick: () => void;
 }
 
-export default class NavigationItem extends React.Component<Props, State> {
-  static state: State = {};
-
-  render() {
+export default class NavigationItem extends React.Component<
+  NavigationItemProps,
+  {}
+> {
+  public render() {
+    const {faIconParams} = this.props;
     return (
-      <div
-        className={classnames([
-            style.sidebar__btn,
-            style.sidebar__nav__item,
-        ])}
-        onClick={this.props.onClick}>
-        <div className={style.sidebar__btn__content}>
-          <span
-            className={classnames([
-                style.sidebar__btn__content__icon,
-                this.props.iconClass,
-            ])}>
-          </span>
-          <span className={style.sidebar__btn__content__text}>
-            {this.props.name}
-          </span>
+      <div className={style["navigation-item"]} onClick={this.props.onClick}>
+        <div>
+          <FontAwesomeIcon icon={faIconParams} />
         </div>
       </div>
     );
