@@ -1,0 +1,40 @@
+@import "+/mixins.scss";
+
+:global {
+.social-button {
+  @include box(40px);
+  @include button-basic;
+  @include disable-user-select;
+
+  border-radius: 4px;
+  font-size: 1rem;
+  padding: 0;
+
+  &.social-button_colored {
+    color: #fff;
+
+    &[social-network-type="google"] {
+      background: #dd3d2a;
+      &:hover,
+      &:focus {
+        background: #da5b4d;
+      }
+      &:active {
+        background: #dd3d2a;
+      }
+    }
+
+    &[social-network-type="github"] {
+      background: #161515;
+      &:hover,
+      &:focus {
+        background: #2b2b2b;
+      }
+      &:active {
+        background: #161515;
+      }
+    }
+  }
+}
+
+}
