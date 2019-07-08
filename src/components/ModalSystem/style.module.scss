@@ -1,0 +1,14 @@
+@import "+/mixins.scss";
+
+.modals {
+}
+
+.modal-overlay {
+  @include box(100%);
+  @include display-flex-row;
+  @include flex-full-content-center;
+  @include fixed-position(0,0,0,0);
+  background-color: var(--modal-overlay-bg);
+  box-sizing: border-box;
+  padding: 32px;
+}

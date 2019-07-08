@@ -1,0 +1,22 @@
+@import "+/mixins.scss";
+
+.login-modal {
+  @include modal(48px, 500px, fit-content);
+}
+
+.login-form {
+  @include form-basic($input-margin: 12px, $inputs-container-margin: 24px);
+
+  input {
+    @include input-field-basic(
+      $bg: var(--theme-colors-green-one),
+      $fsz: 0.8rem
+    );
+    @include input-field-underlined-transparent;
+  }
+}
+
+.login-button {
+  @include button-basic;
+  @include button-with-bg;
+}

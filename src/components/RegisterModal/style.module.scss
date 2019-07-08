@@ -1,0 +1,61 @@
+@import "+/mixins.scss";
+
+.register-modal {
+  @include modal(48px, 500px, fit-content);
+}
+
+.social-links {
+  @include display-flex-row;
+  justify-content: flex-start;
+  margin-bottom: 12px;
+
+  :global(.social-button) {
+    margin-right: 4px;
+  }
+}
+
+.register-form {
+  @include form-basic($input-margin: 12px, $inputs-container-margin: 24px);
+  input {
+    @include input-field-basic(
+      $bg: var(--theme-colors-green-one),
+      $fsz: 0.8rem
+    );
+    @include input-field-underlined-transparent;
+  }
+
+  .form-bottom {
+    @include display-flex-row;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+
+    .submit-button-container {
+    }
+
+    .already-have-an-account {
+      font-size: 0.8rem;
+      color: var(--theme-colors-green-two);
+      cursor: pointer;
+
+      &:hover,
+      &:focus {
+        color: var(--theme-colors-green-one);
+      }
+
+      @include active-cursor-default;
+    }
+  }
+
+  input {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
+
+.register-button {
+  @include button-basic($padding: 0);
+  @include button-transparent($color: #000);
+  font-weight: bold;
+  font-size: 1.1rem;
+}

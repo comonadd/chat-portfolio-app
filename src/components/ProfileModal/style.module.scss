@@ -1,0 +1,35 @@
+.profile-avatar {
+  margin-bottom: 16px;
+  height: 128px;
+}
+
+.profile-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+
+  &__item {
+    display: flex;
+    margin-bottom: 16px;
+    width: 100%;
+
+    &__body {
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      &__name {
+        margin-bottom: 4px;
+        width: 100%;
+        border-bottom: 1px solid #eee;
+        font-size: 14px;
+        font-weight: bold;
+        padding-bottom: 4px;
+      }
+
+      &__val {
+        font-size: 12px;
+      }
+    }
+  }
+}
