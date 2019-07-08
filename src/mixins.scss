@@ -89,10 +89,181 @@
   z-index: pow(10, $lvl);
 }
 
+@mixin disable-user-select {
+  user-select: none;
+}
+
+@mixin button-basic($padding: 14px 8px) {
+  cursor: pointer;
+  padding: $padding;
+  outline: none;
+  border: none;
+
+  &:active {
+    cursor: default;
+  }
+}
+
+@mixin button-transparent($color: var(--body-color)) {
+  background: rgba(0, 0, 0, 0);
+  color: $color;
+  border: none;
+
+  &:hover,
+  &:focus {
+    color: var(--theme-colors-green-two);
+  }
+}
+
+@mixin active-cursor-default {
+  &:active {
+    cursor: default;
+  }
+}
+
+@mixin when-input-is-empty {
+  &[value=""],
+  &:not([value]) {
+    @content;
+  }
+}
+
+@mixin when-input-is-not-empty {
+  &:not[value=""] {
+    @content;
+  }
+}
+
+@mixin input-field-basic(
+  $bg: var(--body-bg),
+  $color: var(--body-color),
+  $fsz: 0.9rem
+) {
+  font-size: 1rem;
+  color: $color;
+  background: $bg;
+  font-size: $fsz;
+  padding: 8px 12px;
+  outline: none;
+  transition: all 50ms;
+
+  &::placeholder {
+    @include disable-user-select;
+    color: inherit;
+    transition: opacity 0.3s linear,
+      transform 5s cubic-bezier(0.075, 0.82, 0.165, 1);
+    font-size: inherit;
+  }
+
+  &:focus::placeholder {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+}
+
+@mixin input-field-underlined-transparent(
+  $underscore-border: 1px solid var(--theme-colors-beige),
+  $color: #000
+) {
+  border: none;
+  background: rgba(0, 0, 0, 0);
+  color: $color;
+  padding: 8px 0;
+  border-bottom: $underscore-border;
+}
+
+@mixin button-with-bg($bg: var(--theme-colors-green-two), $color: #fff) {
+  background: $bg;
+  border-radius: 4px;
+  color: $color;
+}
+
+$input-field-borderfull-default-box-shadow-hover: 0 10px 20px
+    rgba(0, 0, 0, 0.19),
+  0 2px 2px var(--theme-colors-green-two);
+@mixin input-field-borderfull(
+  $border: var(--default-border),
+  $border-hover: 1px solid var(--theme-colors-green-two),
+  $border-active: 1px solid var(--theme-colors-green-one),
+  $box-shadow-hover: $input-field-borderfull-default-box-shadow-hover
+) {
+  border: $border;
+  border-radius: 2px;
+
+  &:hover,
+  &:focus {
+    border: $border-hover;
+    box-shadow: $box-shadow-hover;
+  }
+
+  &:active {
+    border: $border-active;
+  }
+}
+
+@mixin input-field-borderless {
+  border: none !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+@mixin modal($padding, $width, $height, $bg: #fff, $title-color: #000) {
+  @include z-index-level(4);
+  @include display-flex-column;
+  @include fixed-position(0, 0, 0, 0);
+
+  overflow: hidden;
+  border: var(--modal-border);
+  background: $bg;
+  padding: $padding;
+  box-sizing: border-box;
+  margin: auto;
+  width: $width;
+  height: $height;
+  // box-shadow: 0px 0px 3px 2px rgba(0, 0, 0, 0.75);
+  border-radius: 15px;
+
+  .modal-title {
+    @include flex(32px, 0, 0);
+    margin-bottom: 16px;
+    width: 100%;
+    align-items: center;
+    color: $title-color;
+
+    h2 {
+      margin: 0;
+      color: inherit;
+    }
+  }
+
+  &__content {
+    width: 100%;
+    @include flex(100%, 1, 1);
+  }
+}
+
+@mixin button-bordered-transparent {
+  @include button-transparent;
+  border: 2px solid var(--theme-colors-beige);
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 100ms;
+
+  &:hover,
+  &:focus {
+    border-color: var(--theme-colors-yellow);
+  }
+
+  &:active {
+    background: var(--theme-colors-yellow);
+  }
+}
+
 @mixin sidebar-item {
   @include display-flex-row;
   @include flex-full-content-center;
   @include flex(var(--sidebar-width), 0, 0);
+  @include disable-user-select;
 
   color: var(--sidebar-color);
   background-color: var(--sidebar-bg);
@@ -123,10 +294,9 @@
   }
 
   &__content {
+    @include display-flex-row;
+    @include flex-full-content-center;
     flex: 1 0 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
 
     img {
       max-width: 100%;
@@ -140,10 +310,9 @@
     }
 
     &__icon {
+      @include display-flex-row;
+      @include flex-full-content-center;
       height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
       flex: 0 0 80px;
     }
 
@@ -153,5 +322,32 @@
       display: none;
       flex: 1 0 100px;
     }
+  }
+}
+
+@mixin display-flex-inherit {
+  display: flex;
+  flex-direction: inherit;
+}
+
+@mixin form-basic($input-margin: 12px, $inputs-container-margin: 24px, $label-color: #000)  {
+  @include display-flex-column;
+
+  .inputs {
+    @include display-flex-inherit;
+    margin-bottom: $inputs-container-margin;
+
+    input {
+      margin-bottom: $input-margin;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+  }
+
+  .form-label {
+    color: $label-color;
+    margin-bottom: 8px;
   }
 }
