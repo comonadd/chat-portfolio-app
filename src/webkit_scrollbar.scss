@@ -1,5 +1,5 @@
 /**
- * The styles for the WebKit scrollbar.
+ * Styles for the WebKit scrollbar.
  *
  * This file defines the style for the WebKit scrollbar.
  * You can read about styling the WebKit scrollbar
@@ -10,48 +10,48 @@
  * @license MIT
  */
 
-
-
-:global ::-webkit-scrollbar {
-  width: var(--scrollbar-length);
-  height: var(--scrollbar-length);
-  background: var(--scrollbar-bg);
-}
-
-:global ::-webkit-scrollbar-button {
-  // nothing there
-}
-
-:global ::-webkit-scrollbar-track {
-  // nothing there
-}
-
-:global ::-webkit-scrollbar-track-piece {
-  // nothing there
-}
-
-:global ::-webkit-scrollbar-thumb {
-  width: var(--scrollbar-thumb-length);
-  height: var(--scrollbar-thumb-length);
-  background: var(--scrollbar-thumb-bg);
-
-  &:hover {
-    background: var(--scrollbar-thumb-bg-hover);
+:global {
+  ::-webkit-scrollbar {
+    width: var(--scrollbar-length);
+    height: var(--scrollbar-length);
+    background: var(--scrollbar-bg);
   }
 
-  &:focus {
-    background: var(--scrollbar-thumb-bg-focus);
+  ::-webkit-scrollbar-button {
+    // nothing there
   }
 
-  &:active {
-    background: var(--scrollbar-thumb-bg-active);
+  ::-webkit-scrollbar-track {
+    // nothing there
   }
-}
 
-:global ::-webkit-scrollbar-corner {
-  // nothing there
-}
+  ::-webkit-scrollbar-track-piece {
+    // nothing there
+  }
 
-:global ::-webkit-resizer {
-  // nothing there
+  ::-webkit-scrollbar-thumb {
+    width: var(--scrollbar-thumb-length);
+    height: var(--scrollbar-thumb-length);
+    background: var(--scrollbar-thumb-bg);
+
+    &:hover {
+      background: var(--scrollbar-thumb-bg-hover);
+    }
+
+    &:focus {
+      background: var(--scrollbar-thumb-bg-focus);
+    }
+
+    &:active {
+      background: var(--scrollbar-thumb-bg-active);
+    }
+  }
+
+  ::-webkit-scrollbar-corner {
+    // nothing there
+  }
+
+  ::-webkit-resizer {
+    // nothing there
+  }
 }
