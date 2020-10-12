@@ -31,13 +31,6 @@ class UnconnectedLoginModal extends React.Component<
     password: ""
   };
 
-  private handleDocumentKeyPress = (ev: any) => {
-    if (ev.keyCode == 13) {
-      // "Enter" was pressed
-      this.onSubmit();
-    }
-  };
-
   private onFormChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     const name = e.target.name;
@@ -65,27 +58,23 @@ class UnconnectedLoginModal extends React.Component<
   };
 
   private onSubmit = (e?: any) => {
-    e.preventDefault();
-
+    if (e) {
+      e.preventDefault();
+    }
     if (this.checkFields()) {
       this.props
         .signIn(this.state.email, this.state.password)
         .then(() =>
           this.props.addNotification("info", "Successfully logged in")
         )
-        .catch((error: Error) =>
-          this.props.addNotification("error", error.message)
-        );
+        .catch((error: Error) => {
+          this.props.addNotification(
+            "error",
+            "Failed to sign in. Check your credentials."
+          );
+        });
     }
   };
-
-  public componentWillMount() {
-    document.addEventListener("keydown", this.handleDocumentKeyPress, false);
-  }
-
-  public componentWillUnmount() {
-    document.removeEventListener("keydown", this.handleDocumentKeyPress, false);
-  }
 
   public render() {
     const { onRemoval } = this.props;
@@ -96,7 +85,11 @@ class UnconnectedLoginModal extends React.Component<
             <h2>Sign In</h2>
           </div>
           <div className={style["modal-content"]}>
-            <form className={style["login-form"]}>
+            <form
+              onSubmit={this.onSubmit}
+              action="#"
+              className={style["login-form"]}
+            >
               <div className={style["inputs"]}>
                 <input
                   name="email"
@@ -113,11 +106,7 @@ class UnconnectedLoginModal extends React.Component<
                   onChange={this.onFormChange}
                 />
               </div>
-              <button
-                type="submit"
-                className={style["login-button"]}
-                onClick={this.onSubmit}
-              >
+              <button type="submit" className={style["login-button"]}>
                 Login
               </button>
             </form>

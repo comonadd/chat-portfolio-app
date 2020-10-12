@@ -54,21 +54,6 @@ class UnconnectedRegisterModal extends React.Component<
     }
   };
 
-  private handleDocumentKeyPress(ev: any) {
-    if (ev.keyCode == 13) {
-      // "Enter" was pressed
-      this.onSubmit();
-    }
-  }
-
-  public componentWillMount = () => {
-    document.addEventListener("keydown", this.handleDocumentKeyPress, false);
-  };
-
-  public componentWillUnmount = () => {
-    document.removeEventListener("keydown", this.handleDocumentKeyPress, false);
-  };
-
   private showErrorMessage = (msg: string) => {
     this.props.addNotification("error", msg);
   };
@@ -192,10 +177,10 @@ class UnconnectedRegisterModal extends React.Component<
     );
   };
 
-  private onSubmit = (event?: React.MouseEvent<HTMLButtonElement>) => {
-    const { newUserInfo } = this.state;
+  private onSubmit = (e?: any) => {
+    if (e) e.preventDefault();
 
-    if (event) event.preventDefault();
+    const { newUserInfo } = this.state;
 
     if (this.checkFields()) {
       this.props.createFirebaseUser(newUserInfo);
@@ -235,7 +220,11 @@ class UnconnectedRegisterModal extends React.Component<
             <h2>Register</h2>
           </div>
           <div className={style["modal-content"]}>
-            <form action="" className={style["register-form"]}>
+            <form
+              action="#"
+              onSubmit={this.onSubmit}
+              className={style["register-form"]}
+            >
               <div className={style["inputs"]}>
                 <input
                   name="username"
@@ -288,11 +277,7 @@ class UnconnectedRegisterModal extends React.Component<
               </div>
               <div className={style["form-bottom"]}>
                 <div className={style["submit-button-container"]}>
-                  <button
-                    type="submit"
-                    className={style["register-button"]}
-                    onClick={this.onSubmit}
-                  >
+                  <button type="submit" className={style["register-button"]}>
                     Register
                   </button>
                 </div>
