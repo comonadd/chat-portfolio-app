@@ -1,16 +1,17 @@
-import * as firebase from 'firebase/app';
-import 'firebase/database';
-import 'firebase/auth';
+import * as firebase from "firebase/app";
+import "firebase/database";
+import "firebase/auth";
 import { User, Message } from "+/store/types";
 import { getCurrentTime } from "./util";
 
 export const firebaseConfig = {
-  apiKey: "AIzaSyC0YpGGTT3hBK6nTFIy0OhL4DF_Ucpe8Jw",
-  authDomain: "chat-portfolio-app.firebaseapp.com",
-  databaseURL: "https://chat-portfolio-app.firebaseio.com",
-  projectId: "chat-portfolio-app",
-  storageBucket: "chat-portfolio-app.appspot.com",
-  messagingSenderId: "957903827137"
+  apiKey: "AIzaSyArJLoRL6PF5rgFBY-bBAbTDxp_aZFZ2dA",
+  authDomain: "chat-app-1b43f.firebaseapp.com",
+  databaseURL: "https://chat-app-1b43f.firebaseio.com",
+  projectId: "chat-app-1b43f",
+  storageBucket: "",
+  messagingSenderId: "929009643264",
+  appId: "1:929009643264:web:3f02f12a99fc3df3"
 };
 
 export const rrfConfig = {
@@ -38,7 +39,7 @@ export interface FirebaseCreateUserInfo {
 }
 
 export const firebaseCreateUser = (newUserInfo: FirebaseCreateUserInfo) => {
-  const { email, password, firstName, lastName } = newUserInfo;
+  const { email, password, firstName, lastName, username } = newUserInfo;
   return new Promise((resolve: any, reject: any) => {
     firebase
       .auth()
@@ -46,21 +47,31 @@ export const firebaseCreateUser = (newUserInfo: FirebaseCreateUserInfo) => {
       .then(() => {
         if (firebase.auth().currentUser !== null) {
           const currUser = firebase.auth().currentUser as any;
+          const id = currUser.uid;
           currUser
             .updateProfile({
-              id: currUser.uid,
-              displayName: `${firstName} ${lastName}`
+              id,
+              firstName,
+              lastName,
+              username
             })
-            .then(function() {
-              console.log("successfully updated profile");
+            .then(() => {
+              firebase
+                .database()
+                .ref(`users/${id}`)
+                .set({
+                  id,
+                  firstName,
+                  lastName,
+                  username,
+                  email
+                });
               resolve(firebase.auth().currentUser);
             })
-            .catch(function(error: any) {
-              console.log("failed to update profile");
+            .catch((error: any) => {
               reject(error);
             });
         } else {
-          console.log("there is no current user");
           reject(new Error("failed to sign in"));
         }
       })
